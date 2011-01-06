@@ -10,4 +10,6 @@ setup(
     author_email="sean@saaspire.com",
     url="https://github.com/Saaspire/sharpy",
     packages=['sharpy'],
+    license="BSD",
+    long_description=open('README.rst').read(),
 )
