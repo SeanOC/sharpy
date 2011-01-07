@@ -1,13 +1,15 @@
 from copy import copy
 import unittest
 
+from testconfig import config
+
 from sharpy.client import Client
 
 class ClientTests(unittest.TestCase):
     client_defaults =  {
-        'username': 'user',
-        'password': 'pass',
-        'product_code': 'CODE',
+        'username': config['cheddar']['username'],
+        'password': config['cheddar']['password'],
+        'product_code': config['cheddar']['product_code'],
     }
     
     def get_client(self, **kwargs):
@@ -67,4 +69,8 @@ class ClientTests(unittest.TestCase):
         path = 'users'
         params = {'key1': 'value1', 'key2': 'value2'}
         self.try_url_build(path, params)
+        
+    def test_make_request(self):
+        path = 'plans'
+        client = self.get_client()
        
