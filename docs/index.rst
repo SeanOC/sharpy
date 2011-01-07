@@ -9,7 +9,9 @@ Welcome to Sharpy's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   
+   development
 
 Indices and tables
 ==================
