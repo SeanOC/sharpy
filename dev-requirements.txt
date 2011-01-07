@@ -1,0 +1,3 @@
+# Packages which are required for development but not use of sharpy
+
+nose
