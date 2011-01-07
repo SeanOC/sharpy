@@ -3,7 +3,7 @@ from urllib import urlencode
 from elementtree.ElementTree import XML
 import httplib2
 
-from sharpy.exceptions import AccessDenied, BadRequest
+from sharpy.exceptions import AccessDenied, BadRequest, NotFound
 
 class Client(object):
     default_endpoint = 'https://cheddargetter.com/xml'
@@ -49,8 +49,6 @@ class Client(object):
         # Setup values
         url = self.build_url(path, params)
         method = 'GET'
-        if data:
-            method = 'POST'
             
         # Setup http client
         h = httplib2.Http(cache=self.cache, timeout=self.timeout)
@@ -58,11 +56,15 @@ class Client(object):
         
         # Make request
         response, content = h.request(url, method)
-        if response.status == 401:
-            raise AccessDenied
-        elif response.status == 400:
+        status = response.status
+        if status > 200:
             error = self.parse_error(content)
-            raise BadRequest(error['message'])
+            if status == 401:
+                raise AccessDenied(error['message'])
+            elif status == 400:
+                raise BadRequest(error['message'])
+            elif status == 404:
+                raise NotFound(error['message'])
         
         return response, content
         

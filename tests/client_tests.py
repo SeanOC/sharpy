@@ -5,7 +5,7 @@ from nose.tools import raises
 from testconfig import config
 
 from sharpy.client import Client
-from sharpy.exceptions import AccessDenied, BadRequest
+from sharpy.exceptions import AccessDenied, BadRequest, NotFound
 
 class ClientTests(unittest.TestCase):
     client_defaults =  {
@@ -86,8 +86,14 @@ class ClientTests(unittest.TestCase):
         client = self.get_client(username=bad_username)
         client.make_request(path)
         
-    #@raises(BadRequest)
+    @raises(BadRequest)
     def test_make_request_bad_request(self):
         path = 'plans'
+        client = self.get_client()
+        client.make_request(path)
+        
+    @raises(NotFound)
+    def test_make_request_not_found(self):
+        path = 'things-which-dont-exist'
         client = self.get_client()
         client.make_request(path)
