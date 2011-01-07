@@ -12,4 +12,5 @@ setup(
     packages=['sharpy'],
     license="BSD",
     long_description=open('README.rst').read(),
+    requires=['httplib2']
 )
