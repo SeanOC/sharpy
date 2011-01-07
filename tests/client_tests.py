@@ -1,9 +1,11 @@
 from copy import copy
 import unittest
 
+from nose.tools import raises
 from testconfig import config
 
 from sharpy.client import Client
+from sharpy.exceptions import AccessDenied, BadRequest
 
 class ClientTests(unittest.TestCase):
     client_defaults =  {
@@ -71,7 +73,21 @@ class ClientTests(unittest.TestCase):
         self.try_url_build(path, params)
         
     def test_make_request(self):
-        path = 'plans'
+        path = 'plans/get'
         client = self.get_client()
         response, content = client.make_request(path)
-       
+        
+        self.assertEquals(response.status, 200)
+    
+    @raises(AccessDenied)
+    def test_make_request_access_denied(self):
+        path = 'plans/get'
+        bad_username = self.client_defaults['username'] + '_bad'
+        client = self.get_client(username=bad_username)
+        client.make_request(path)
+        
+    #@raises(BadRequest)
+    def test_make_request_bad_request(self):
+        path = 'plans'
+        client = self.get_client()
+        client.make_request(path)

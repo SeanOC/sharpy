@@ -1,5 +1,9 @@
-import httplib2
 from urllib import urlencode
+
+from elementtree.ElementTree import XML
+import httplib2
+
+from sharpy.exceptions import AccessDenied, BadRequest
 
 class Client(object):
     default_endpoint = 'https://cheddargetter.com/xml'
@@ -47,12 +51,28 @@ class Client(object):
         method = 'GET'
         if data:
             method = 'POST'
-        
+            
         # Setup http client
         h = httplib2.Http(cache=self.cache, timeout=self.timeout)
         h.add_credentials(self.username, self.password)
         
         # Make request
         response, content = h.request(url, method)
+        if response.status == 401:
+            raise AccessDenied
+        elif response.status == 400:
+            error = self.parse_error(content)
+            raise BadRequest(error['message'])
         
         return response, content
+        
+        
+    def parse_error(self, xml):
+        error = {}
+        elem = XML(xml)
+        error['id'] = elem.attrib['id']
+        error['code'] = elem.attrib['code']
+        error['aux_code'] = elem.attrib['auxCode']
+        error['message'] = elem.text
+        
+        return error
