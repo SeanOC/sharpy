@@ -64,9 +64,9 @@ row below, and click on the "Add Plan" button at the bottom of the page.
 Once your new plan is created click on "Add Plan" at the top of the page and
 repeat the process until all of the plans described below have been entered.
 
-**Free Montly**
+**Free Monthly**
 
-:Name: Free Montly
+:Name: Free Monthly
 :Code: FREE_MONTLY
 :Frequency: Monthly
 :Description: A free monthly plan
@@ -80,7 +80,7 @@ repeat the process until all of the plans described below have been entered.
 
 **Paid Monthly**
 
-:Name: Paid Montly
+:Name: Paid Monthly
 :Code: PAID_MONTHLY
 :Frequency: Monthly
 :Description: *None*
@@ -126,7 +126,7 @@ sharpy's test suite.
 Maintenance
 ===========
 
-Congratuations!  You are done setting up your cheddar account for testing
+Congratulations!  You are done setting up your cheddar account for testing
 sharpy.  Generally speaking, you shouldn't need to touch this account any
 further.  The test suite should be pretty good about cleaning up after 
 itself and leaving the account in the state it was in when the test run
