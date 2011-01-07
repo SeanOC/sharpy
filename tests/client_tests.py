@@ -73,4 +73,5 @@ class ClientTests(unittest.TestCase):
     def test_make_request(self):
         path = 'plans'
         client = self.get_client()
+        response, content = client.make_request(path)
        
