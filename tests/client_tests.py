@@ -7,6 +7,8 @@ from testconfig import config
 from sharpy.client import Client
 from sharpy.exceptions import AccessDenied, BadRequest, NotFound
 
+from testing_tools.decorators import clear_users
+
 class ClientTests(unittest.TestCase):
     client_defaults =  {
         'username': config['cheddar']['username'],
@@ -97,3 +99,4 @@ class ClientTests(unittest.TestCase):
         path = 'things-which-dont-exist'
         client = self.get_client()
         client.make_request(path)
+        
