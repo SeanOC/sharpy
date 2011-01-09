@@ -1,4 +1,8 @@
-from elementtree.ElementTree import XML
+try:
+    from lxml.etree import XML
+except ImportError:
+    print "couldn't import LXML"
+    from elementtree.ElementTree import XML
 
 def parse_error(xml_str):
     error = {}

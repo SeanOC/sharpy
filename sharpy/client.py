@@ -1,6 +1,5 @@
 from urllib import urlencode
 
-from elementtree.ElementTree import XML
 import httplib2
 
 from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound, PreconditionFailed, CheddarFailure, NaughtyGateway, UnprocessableEntity
