@@ -1,4 +1,5 @@
 from copy import copy
+from datetime import date, timedelta
 import unittest
 
 from nose.tools import raises
@@ -112,4 +113,35 @@ class ClientTests(unittest.TestCase):
         }
         client = self.get_client()
         client.make_request(path, data=data)
+    
+
+    def generate_error_response(self, auxcode):
+        '''
+        Creates a request to cheddar which should return an error
+        with the provided aux code.  See the urls below for details
+        on simulating errors and aux codes:
+        http://support.cheddargetter.com/kb/api-8/error-simulation
+        http://support.cheddargetter.com/kb/api-8/error-handling
+        '''
+        path = 'customers/new'
+        expiration = date.today() + timedelta(days=180)
         
+        data = {
+            'code': 'post_test',
+            'firstName': 'post',
+            'lastName': 'test',
+            'email': 'garbage@saaspire.com',
+            'subscription[planCode]': 'PAID_MONTHLY',
+            'subscription[ccNumber]': '4111111111111111',
+            'subscription[ccExpiration]': expiration.strftime('%m/%Y'),
+            'subscription[ccCardCode]': '123',
+            'subscription[ccFirstName]': 'post',
+            'subscription[ccLastName]': 'test',
+            'subscription[ccZip]': '0%d' % auxcode,
+        }
+        
+        client = self.get_client()
+        client.make_request(path, data=data)
+    
+    def test_post_request(self):
+        self.generate_error_response(auxcode=1000)
