@@ -6,7 +6,7 @@ from nose.tools import raises, assert_raises
 from testconfig import config
 
 from sharpy.client import Client
-from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure, NaughtyGateway
+from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure, NaughtyGateway, UnprocessableEntity
 
 from testing_tools.decorators import clear_users
 
@@ -177,4 +177,9 @@ class ClientTests(unittest.TestCase):
     def test_cheddar_502s(self):
         auxcodes = (3000, 4000)
         expected_exception = NaughtyGateway
+        self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
+        
+    def test_cheddar_422s(self):
+        auxcodes = (5000, 5001, 5002, 5003, 6000, 6001, 6002, 7000)
+        expected_exception = UnprocessableEntity
         self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)

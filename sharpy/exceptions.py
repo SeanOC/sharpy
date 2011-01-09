@@ -43,3 +43,9 @@ class NaughtyGateway(CheddarError):
     very unexpected.
     """
     pass
+    
+class UnprocessableEntity(CheddarError):
+    """
+    An error occurred during processing. Please fix the error and try again.
+    """
+    pass
