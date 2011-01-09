@@ -3,7 +3,7 @@ from urllib import urlencode
 from elementtree.ElementTree import XML
 import httplib2
 
-from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound
+from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound, PreconditionFailed, CheddarFailure
 
 class Client(object):
     default_endpoint = 'https://cheddargetter.com/xml'
@@ -68,14 +68,19 @@ class Client(object):
         response, content = h.request(url, method, body=body, headers=headers)
         status = response.status
         if status != 200:
+            exception_class = CheddarError
             if status == 401:
-                raise AccessDenied(response, content)
+                exception_class = AccessDenied
             elif status == 400:
-                raise BadRequest(response, content)
+                exception_class = BadRequest
             elif status == 404:
-                raise NotFound(response, content)
-            else:
-                raise CheddarError(response, content)
+                exception_class = NotFound
+            elif status == 412:
+                exception_class = PreconditionFailed
+            elif status == 500:
+                exception_class = CheddarFailure
+            
+            raise exception_class(response, content)
         
         return response, content
         

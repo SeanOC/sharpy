@@ -2,11 +2,11 @@ from copy import copy
 from datetime import date, timedelta
 import unittest
 
-from nose.tools import raises
+from nose.tools import raises, assert_raises
 from testconfig import config
 
 from sharpy.client import Client
-from sharpy.exceptions import AccessDenied, BadRequest, NotFound
+from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure
 
 from testing_tools.decorators import clear_users
 
@@ -143,5 +143,13 @@ class ClientTests(unittest.TestCase):
         client = self.get_client()
         client.make_request(path, data=data)
     
-    def test_post_request(self):
-        self.generate_error_response(auxcode=1000)
+    def assertCheddarError(self, auxcode, expected_exception):
+        assert_raises(
+            self.generate_error_response,
+            expected_exception,
+            auxcode=auxcode,
+        )
+    
+    def test_cheddar_failures(self):
+        for auxcode in (1000, 1001, 1002, 1003):
+            yield self.assertCheddarError(auxcode, CheddarFailure)

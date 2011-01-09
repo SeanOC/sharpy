@@ -28,3 +28,11 @@ class BadRequest(CheddarError):
 class NotFound(CheddarError):
     "A request to chedder was made for a resource which doesn't exist"
     pass
+    
+class CheddarFailure(CheddarError):
+    "A request to cheddar encountered an unexpected error on the cheddar side"
+    pass
+    
+class PreconditionFailed(CheddarError):
+    "A request to cheddar was made but failed CG's validation in some way."
+    pass
