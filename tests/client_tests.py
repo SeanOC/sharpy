@@ -100,3 +100,16 @@ class ClientTests(unittest.TestCase):
         client = self.get_client()
         client.make_request(path)
         
+    @clear_users
+    def test_post_request(self):
+        path = 'customers/new'
+        data = {
+            'code': 'post_test',
+            'firstName': 'post',
+            'lastName': 'test',
+            'email': 'garbage@saaspire.com',
+            'subscription[planCode]': 'FREE_MONTHLY',
+        }
+        client = self.get_client()
+        client.make_request(path, data=data)
+        
