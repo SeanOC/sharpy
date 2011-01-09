@@ -3,7 +3,7 @@ from urllib import urlencode
 from elementtree.ElementTree import XML
 import httplib2
 
-from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound, PreconditionFailed, CheddarFailure
+from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound, PreconditionFailed, CheddarFailure, NaughtyGateway
 
 class Client(object):
     default_endpoint = 'https://cheddargetter.com/xml'
@@ -79,6 +79,8 @@ class Client(object):
                 exception_class = PreconditionFailed
             elif status == 500:
                 exception_class = CheddarFailure
+            elif status == 502:
+                exception_class = NaughtyGateway
             
             raise exception_class(response, content)
         

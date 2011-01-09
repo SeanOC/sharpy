@@ -6,7 +6,7 @@ from nose.tools import raises, assert_raises
 from testconfig import config
 
 from sharpy.client import Client
-from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure
+from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure, NaughtyGateway
 
 from testing_tools.decorators import clear_users
 
@@ -145,15 +145,36 @@ class ClientTests(unittest.TestCase):
     
     def assertCheddarError(self, auxcode, expected_exception):
         assert_raises(
-            self.generate_error_response,
             expected_exception,
+            self.generate_error_response,
             auxcode=auxcode,
         )
+        
+    def assertCheddarErrorForAuxCodes(self, auxcodes, expected_exception):
+        for auxcode in auxcodes:
+            self.assertCheddarError(auxcode, expected_exception)
     
     def test_cheddar_500s(self):
-        for auxcode in (1000, 1001, 1002, 1003):
-            yield self.assertCheddarError(auxcode, CheddarFailure)
+        auxcodes = (1000, 1002, 1003)
+        expected_exception = CheddarFailure
+        self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
+        
+    def test_cheddar_400(self):
+        '''
+        The cheddar docs at
+        http://support.cheddargetter.com/kb/api-8/error-handling
+        say that this aux code should return a 502 but in practice 
+        the API returns a 400.  Not sure if this is a bug or typo in the
+        docs but for now we're assuming the API is correct.
+        '''
+        self.assertCheddarError(auxcode=1001, expected_exception=BadRequest)
             
     def test_cheddar_401s(self):
-        for auxcode in range(2000, 2004):
-            yield self.assertCheddarError(auxcode, AccessDenied)
+        auxcodes = (2000, 2001, 2002, 2003)
+        expected_exception = AccessDenied
+        self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
+            
+    def test_cheddar_502s(self):
+        auxcodes = (3000, 4000)
+        expected_exception = NaughtyGateway
+        self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)

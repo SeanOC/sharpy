@@ -36,3 +36,10 @@ class CheddarFailure(CheddarError):
 class PreconditionFailed(CheddarError):
     "A request to cheddar was made but failed CG's validation in some way."
     pass
+    
+class NaughtyGateway(CheddarError):
+    """
+    Cheddar either couldn't contact the gateway or the gateway did something
+    very unexpected.
+    """
+    pass
