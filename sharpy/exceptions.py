@@ -1,12 +1,30 @@
+from sharpy.parsers import parse_error
 
-class AccessDenied(Exception):
+class CheddarError(Exception):
+    "Base class for exceptions returned by cheddar"
+    
+    def __init__(self, response, content, *args, **kwargs):
+        super(CheddarError, self).__init__(*args, **kwargs)
+        error_info = parse_error(content)
+        self.response = response
+        self.error_info = error_info
+        
+    def __str__(self):
+        return '%s (%s) %s - %s' % (
+            self.response.status,
+            self.error_info['aux_code'],
+            self.response.reason,
+            self.error_info['message'],
+        )
+
+class AccessDenied(CheddarError):
     "A request to cheddar returned a status code of 401"
     pass
     
-class BadRequest(Exception):
+class BadRequest(CheddarError):
     "A request to cheddar was invalid in some way"
     pass
 
-class NotFound(Exception):
+class NotFound(CheddarError):
     "A request to chedder was made for a resource which doesn't exist"
     pass

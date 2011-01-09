@@ -3,7 +3,7 @@ from urllib import urlencode
 from elementtree.ElementTree import XML
 import httplib2
 
-from sharpy.exceptions import AccessDenied, BadRequest, NotFound
+from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound
 
 class Client(object):
     default_endpoint = 'https://cheddargetter.com/xml'
@@ -68,25 +68,15 @@ class Client(object):
         response, content = h.request(url, method, body=body, headers=headers)
         status = response.status
         if status != 200:
-            error = self.parse_error(content)
             if status == 401:
-                raise AccessDenied(error['message'])
+                raise AccessDenied(response, content)
             elif status == 400:
-                raise BadRequest(error['message'])
+                raise BadRequest(response, content)
             elif status == 404:
-                raise NotFound(error['message'])
+                raise NotFound(response, content)
             else:
-                raise Exception('Cheddar returned a response with the code %s - %s' % (status, content))
+                raise CheddarError(response, content)
         
         return response, content
         
         
-    def parse_error(self, xml):
-        error = {}
-        elem = XML(xml)
-        error['id'] = elem.attrib['id']
-        error['code'] = elem.attrib['code']
-        error['aux_code'] = elem.attrib['auxCode']
-        error['message'] = elem.text
-        
-        return error
