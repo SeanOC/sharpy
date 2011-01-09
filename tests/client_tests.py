@@ -150,6 +150,10 @@ class ClientTests(unittest.TestCase):
             auxcode=auxcode,
         )
     
-    def test_cheddar_failures(self):
+    def test_cheddar_500s(self):
         for auxcode in (1000, 1001, 1002, 1003):
             yield self.assertCheddarError(auxcode, CheddarFailure)
+            
+    def test_cheddar_401s(self):
+        for auxcode in range(2000, 2004):
+            yield self.assertCheddarError(auxcode, AccessDenied)
