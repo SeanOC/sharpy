@@ -1,9 +1,12 @@
-from sharpy.parsers import parse_error
+
 
 class CheddarError(Exception):
     "Base class for exceptions returned by cheddar"
     
     def __init__(self, response, content, *args, **kwargs):
+        # Importing in method to break circular dependecy
+        from sharpy.parsers import parse_error
+        
         super(CheddarError, self).__init__(*args, **kwargs)
         error_info = parse_error(content)
         self.response = response
@@ -47,5 +50,12 @@ class NaughtyGateway(CheddarError):
 class UnprocessableEntity(CheddarError):
     """
     An error occurred during processing. Please fix the error and try again.
+    """
+    pass
+    
+class ParseError(Exception):
+    """
+    Sharpy recieved unknown output from cheddar and doesn't know what
+    to do with it.
     """
     pass
