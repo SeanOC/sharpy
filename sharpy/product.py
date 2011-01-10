@@ -224,15 +224,43 @@ class Customer(object):
         for datum in meta_data:
             self.meta_data[datum['name']] = datum['value']
         
-        #self.subscription = Subscription(**subscriptions[0])
+        self.subscription = Subscription(**subscriptions[0])
         
         super(Customer, self).__init__()
     
     def __repr__(self):
-        return 'Customer: %s %s (%s)' % (
+        return u'Customer: %s %s (%s)' % (
             self.first_name,
             self.last_name,
             self.code
         )
+    
+class Subscription(object):
+    
+    def __init__(self, id, gateway_token, cc_first_name, cc_last_name, \
+                 cc_company, cc_country, cc_address, cc_city, cc_state, \
+                 cc_zip, cc_type, cc_last_four, cc_expiration_date, \
+                 canceled_datetime=None ,created_datetime=None, \
+                 plans=None, invoices=None):
+        self.id = id
+        self.gateway_token = gateway_token
+        self.cc_first_name = cc_first_name
+        self.cc_last_name = cc_last_name
+        self.cc_company = cc_company
+        self.cc_country = cc_country
+        self.cc_address = cc_address
+        self.cc_city = cc_city
+        self.cc_state = cc_state
+        self.cc_zip = cc_zip
+        self.cc_type = cc_type
+        self.cc_last_four = cc_last_four
+        self.cc_expiration_date = cc_expiration_date
+        self.canceled = canceled_datetime
+        self.created = created_datetime
         
+        
+        super(Subscription, self).__init__()
+    
+    def __repr__(self):
+        return u'Subscription: %s' % self.id
         

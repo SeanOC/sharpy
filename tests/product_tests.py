@@ -175,3 +175,14 @@ class ProductTests(unittest.TestCase):
         result = repr(customer)
 
         self.assertEquals(expected, result)
+        
+    @clear_users
+    def test_subscription_repr(self):
+        customer = self.get_customer()
+        subscription = customer.subscription
+        
+        expected = 'Subscription:'
+        result = repr(subscription)
+        
+        self.assertIn(expected, result)
+        
