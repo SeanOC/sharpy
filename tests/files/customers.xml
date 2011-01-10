@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers>
+  <customer id="5850e7f8-6dbc-102e-b098-40402145ee8b" code="test">
+    <firstName>Test</firstName>
+    <lastName>User</lastName>
+    <company/>
+    <email>garbage@saaspire.com</email>
+    <notes/>
+    <gatewayToken/>
+    <isVatExempt>0</isVatExempt>
+    <vatNumber/>
+    <firstContactDatetime/>
+    <referer/>
+    <refererHost/>
+    <campaignSource/>
+    <campaignMedium/>
+    <campaignTerm/>
+    <campaignContent/>
+    <campaignName/>
+    <createdDatetime>2011-01-10T03:46:10+00:00</createdDatetime>
+    <modifiedDatetime>2011-01-10T03:46:10+00:00</modifiedDatetime>
+    <metaData/>
+    <subscriptions>
+      <subscription id="58518438-6dbc-102e-b098-40402145ee8b">
+        <plans>
+          <plan id="6b0d13f4-6bef-102e-b098-40402145ee8b" code="FREE_MONTHLY">
+            <name>Free Monthly</name>
+            <description>A free monthly plan</description>
+            <isActive>1</isActive>
+            <isFree>1</isFree>
+            <trialDays>0</trialDays>
+            <billingFrequency>monthly</billingFrequency>
+            <billingFrequencyPer>month</billingFrequencyPer>
+            <billingFrequencyUnit>months</billingFrequencyUnit>
+            <billingFrequencyQuantity>1</billingFrequencyQuantity>
+            <setupChargeCode/>
+            <setupChargeAmount>0.00</setupChargeAmount>
+            <recurringChargeCode>FREE_MONTHLY_RECURRING</recurringChargeCode>
+            <recurringChargeAmount>0.00</recurringChargeAmount>
+            <createdDatetime>2011-01-07T20:46:43+00:00</createdDatetime>
+          </plan>
+        </plans>
+        <gatewayToken/>
+        <ccFirstName/>
+        <ccLastName/>
+        <ccCompany/>
+        <ccCountry/>
+        <ccAddress/>
+        <ccCity/>
+        <ccState/>
+        <ccZip/>
+        <ccType/>
+        <ccLastFour/>
+        <ccExpirationDate/>
+        <canceledDatetime/>
+        <createdDatetime>2011-01-10T03:46:10+00:00</createdDatetime>
+        <invoices>
+          <invoice id="58566638-6dbc-102e-b098-40402145ee8b">
+            <number>1</number>
+            <type>subscription</type>
+            <vatRate/>
+            <billingDatetime>2011-02-10T03:46:10+00:00</billingDatetime>
+            <paidTransactionId/>
+            <createdDatetime>2011-01-10T03:46:10+00:00</createdDatetime>
+            <charges>
+              <charge id="" code="FREE_MONTHLY_RECURRING">
+                <type>recurring</type>
+                <quantity>1</quantity>
+                <eachAmount>0.00</eachAmount>
+                <description/>
+                <createdDatetime>2011-02-10T03:46:10+00:00</createdDatetime>
+              </charge>
+            </charges>
+          </invoice>
+        </invoices>
+      </subscription>
+    </subscriptions>
+  </customer>
+</customers>
