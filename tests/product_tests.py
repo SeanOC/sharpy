@@ -4,6 +4,8 @@ from testconfig import config
 
 from sharpy.product import CheddarProduct
 
+from testing_tools.decorators import clear_users
+
 class ProductTests(unittest.TestCase):
     
     client_defaults =  {
@@ -45,3 +47,16 @@ class ProductTests(unittest.TestCase):
         plan = product.get_plan(code)
         
         self.assertEquals(code, plan.code)
+    
+    @clear_users
+    def test_simple_create_customer(self):
+        product = self.get_product()
+        product.create_customer(
+            code='test',
+            email='garbage@saaspire.com',
+            first_name='Test',
+            last_name='User',
+            plan_code='FREE_MONTHLY'
+        )
+        
+        assert False

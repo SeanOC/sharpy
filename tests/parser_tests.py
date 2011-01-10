@@ -7,7 +7,7 @@ from dateutil.tz import tzutc
 from nose.tools import raises
 
 from sharpy.exceptions import ParseError
-from sharpy.parsers import CheddarOutputParser, parse_error, PlansParser
+from sharpy.parsers import CheddarOutputParser, parse_error, PlansParser, CustomersParser
 
 class ParserTests(unittest.TestCase):
     
@@ -41,6 +41,14 @@ class ParserTests(unittest.TestCase):
         
         parser.parse_bool('test')
         
+    def test_bool_parsing_empty(self):
+        parser = CheddarOutputParser()
+
+        expected = None
+        result = parser.parse_bool('')
+
+        self.assertEquals(expected, result)
+        
     def test_int_parsing(self):
         parser = CheddarOutputParser()
         
@@ -55,6 +63,14 @@ class ParserTests(unittest.TestCase):
         
         parser.parse_int('test')
         
+    def test_int_parsing_empty(self):
+        parser = CheddarOutputParser()
+
+        expected = None
+        result = parser.parse_int('')
+
+        self.assertEquals(expected, result)
+        
     def test_decimal_parsing(self):
         parser = CheddarOutputParser()
         
@@ -68,6 +84,14 @@ class ParserTests(unittest.TestCase):
         parser = CheddarOutputParser()
         
         parser.parse_decimal('test')
+        
+    def test_decimal_parsing_empty(self):
+        parser = CheddarOutputParser()
+
+        expected = None
+        result = parser.parse_decimal('')
+
+        self.assertEquals(expected, result)
         
     def test_datetime_parsing(self):
         parser = CheddarOutputParser()
@@ -90,6 +114,14 @@ class ParserTests(unittest.TestCase):
         parser = CheddarOutputParser()
         
         parser.parse_datetime('test')
+        
+    def test_datetime_parsing_empty(self):
+        parser = CheddarOutputParser()
+        
+        expected = None
+        result = parser.parse_datetime('')
+        
+        self.assertEquals(expected, result)
         
     
     def test_error_parser(self):
@@ -144,4 +176,16 @@ class ParserTests(unittest.TestCase):
         result = parser.parse_xml(plans_xml)
         
         self.assertEquals(expected, result)
+        
+    def test_customers_parser(self):
+        customers_xml = self.load_file('customers.xml')
+        parser = CustomersParser()
+        
+        result = parser.parse_xml(customers_xml)
+        import pprint
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(result)
+        
+        #assert False
+        
         

@@ -1,5 +1,6 @@
 from urllib import urlencode
 
+from dateutil.tz import tzutc
 import httplib2
 
 from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound, PreconditionFailed, CheddarFailure, NaughtyGateway, UnprocessableEntity
@@ -39,6 +40,12 @@ class Client(object):
                 url = u'%s/%s/%s' % (url, key, value)
             
         return url
+        
+    def format_datetime(self, to_format):
+        utc_value = to_format.astimezone(tzutc)
+        str_dt = utc_value.strftime('%Y-%m-%dT%H:%M:%S+00:00')
+        return str_dt
+        
     
     def make_request(self, path, params=None, data=None):
         '''
