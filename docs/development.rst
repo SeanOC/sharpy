@@ -92,6 +92,36 @@ repeat the process until all of the plans described below have been entered.
 :Tracked Items: *None*
 :First Bill: *Leave defaults*
 
+**Tracked Monthly**
+
+:Name: Tracked Monthly
+:Code: TRACKED_MONTHLY
+:Frequency: Monthly
+:Description: *None*
+:Monthly Amount: 10.00
+:Charge Code: TRACKED_MONTHLY_AMOUNT
+:Setup Fee: No
+:Setup Amount: 0.00
+:Setup Code: TRACKED_MONTHLY_SETUP
+:Tracked Items: 
+
+    **Monthly Item**
+    
+    :Name: Monthly Item
+    :Code: MONTHLY_ITEM
+    :Quantity Inc: 2
+    :Overage Amount: 10.00
+    :Monthly: Yes
+    
+    **Once Item**
+    
+    :Name: Once Item
+    :Code: ONCE_ITEM
+    :Quantity Inc: 0
+    :Overage Amount: 10.00
+    :Monthly: No
+
+
 
 Setup Payment Gateway
 =====================
