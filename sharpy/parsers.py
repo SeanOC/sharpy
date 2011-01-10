@@ -141,12 +141,32 @@ class CustomersParser(CheddarOutputParser):
         customer['created_datetime'] = self.parse_datetime(customer_element.findtext('createdDatetime'))
         customer['modified_datetime'] = self.parse_datetime(customer_element.findtext('modifiedDatetime'))
         
-        # TODO:  Metadata
+        # Metadata
+        customer['meta_data'] = self.parse_meta_data(customer_element.find('metaData'))
         
         # Subscriptions
         customer['subsciptions'] = self.parse_subscriptions(customer_element.find('subscriptions'))
         
         return customer
+    
+    def parse_meta_data(self, meta_data_element):
+        meta_data = []
+        for meta_datum_element in meta_data_element:
+            meta_data.append(self.parse_meta_datum(meta_datum_element))
+        
+        return meta_data
+    
+    def parse_meta_datum(self, meta_datum_element):
+        meta_datum = {}
+        
+        meta_datum['id'] = meta_datum_element.attrib['id']
+        meta_datum['name'] = meta_datum_element.findtext('name')
+        meta_datum['value'] = meta_datum_element.findtext('value')
+        meta_datum['created_datetime'] = self.parse_datetime(meta_datum_element.findtext('createdDatetime'))
+        meta_datum['modified_datetime'] = self.parse_datetime(meta_datum_element.findtext('modifiedDatetime'))
+        
+        return meta_datum
+        
         
     def parse_subscriptions(self, subscriptions_element):
         subscriptions = []
@@ -210,6 +230,10 @@ class CustomersParser(CheddarOutputParser):
         invoice['billing_datetime'] = self.parse_datetime(invoice_element.findtext('billingDatetime'))
         invoice['paid_transaction_id'] = invoice_element.findtext('paidTransactionId')
         invoice['created_datetime'] = self.parse_datetime(invoice_element.findtext('createdDatetime'))
+        
+        invoice['charges'] = self.parse_charges(invoice_element.find('charges'))
+        
+        return invoice
         
     def parse_charges(self, charges_element):
         charges = []

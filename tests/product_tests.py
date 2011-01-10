@@ -56,7 +56,7 @@ class ProductTests(unittest.TestCase):
             email='garbage@saaspire.com',
             first_name='Test',
             last_name='User',
-            plan_code='FREE_MONTHLY'
+            plan_code='FREE_MONTHLY',
+            meta_data = {'key_1': 'value_1', 'key2': 'value_2'},
         )
         
-        assert False
