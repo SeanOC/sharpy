@@ -42,7 +42,10 @@ class Client(object):
         return url
         
     def format_datetime(self, to_format):
-        utc_value = to_format.astimezone(tzutc)
+        if to_format.tzinfo is not None:
+            utc_value = to_format.astimezone(tzutc())
+        else:
+            utc_value = to_format
         str_dt = utc_value.strftime('%Y-%m-%dT%H:%M:%S+00:00')
         return str_dt
         

@@ -145,7 +145,7 @@ class CustomersParser(CheddarOutputParser):
         customer['meta_data'] = self.parse_meta_data(customer_element.find('metaData'))
         
         # Subscriptions
-        customer['subsciptions'] = self.parse_subscriptions(customer_element.find('subscriptions'))
+        customer['subscriptions'] = self.parse_subscriptions(customer_element.find('subscriptions'))
         
         return customer
     

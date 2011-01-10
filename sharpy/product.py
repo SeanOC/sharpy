@@ -1,5 +1,5 @@
 from sharpy.client import Client
-from sharpy.parsers import PlansParser
+from sharpy.parsers import PlansParser, CustomersParser
 
 class CheddarProduct(object):
     
@@ -106,10 +106,10 @@ class CheddarProduct(object):
             data['subscription[ccNumber]'] = cc_number
         
         if cc_expiration:
-            data['subscription[ccExpiration]'] = cc_expiration.strftime('%m/%Y')
+            data['subscription[ccExpiration]'] = cc_expiration
         
         if cc_card_code:
-            data['subscription[ccCardCode]']
+            data['subscription[ccCardCode]'] = cc_card_code
         
         if cc_first_name:
             data['subscription[ccFirstName]'] = cc_first_name
@@ -124,7 +124,7 @@ class CheddarProduct(object):
             data['subscription[ccCountry]'] = cc_country
         
         if cc_address:
-            data['subscription[ccAddress]'] = cc_addresss
+            data['subscription[ccAddress]'] = cc_address
         
         if cc_city:
             data['subscription[ccCity]'] = cc_city
@@ -145,13 +145,14 @@ class CheddarProduct(object):
         if items:
             for i, item in enumerate(items):
                 data['items[%d][itemCode]' % i] = item['code']
-                data['items[%d][quantity]' % i] = item.get('quantity', 0)
+                data['items[%d][quantity]' % i] = item.get('quantity', 1)
         
         response = self.client.make_request(path='customers/new', data=data)
-        print response.content
+        cusotmer_parser = CustomersParser()
+        customers_data = cusotmer_parser.parse_xml(response.content)
+        customer = Customer(product=self, **customers_data[0])
         
-                                
-                            
+        return customer
         
     def get_customers(self):
         response = self.client.make_request(path='customers/get')
@@ -180,7 +181,58 @@ class PricingPlan(object):
         self.setup_charge_amount = setup_charge_amount
         self.recurring_charge_code = recurring_charge_code
         self.recurring_charge_amount = recurring_charge_amount
-        self.created_datetime = created_datetime
+        self.created= created_datetime
+        
+        super(PricingPlan, self).__init__()
         
     def __repr__(self):
         return u'PricingPlan: %s (%s)' % (self.name, self.code)
+
+class Customer(object):
+    
+    def __init__(self, code, first_name, last_name, email, product, id=None, \
+                 company=None, notes=None, gateway_token=None, \
+                 is_vat_excempt=None, vat_number=None, \
+                 first_contact_datetime=None, referer=None, \
+                 referer_host=None, campaign_source=None, \
+                 campaign_medium=None, campaign_term=None, \
+                 campaign_content=None, campaign_name=None, \
+                 created_datetime=None, modified_datetime=None, \
+                 meta_data=None, subscriptions=None):
+        self.code = code
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.product = product
+        self.company = company
+        self.notes = notes
+        self.gateway_token = gateway_token
+        self.is_vat_excempt = is_vat_excempt
+        self.vat_number = vat_number
+        self.first_contact_datetime = first_contact_datetime
+        self.referer = referer
+        self.referer_host = referer_host
+        self.campaign_source = campaign_source
+        self.campaign_medium = campaign_medium
+        self.campaign_content = campaign_content
+        self.campaign_name = campaign_name
+        self.created = created_datetime
+        self.modified = modified_datetime
+        
+        self.meta_data = {}
+        for datum in meta_data:
+            self.meta_data[datum['name']] = datum['value']
+        
+        #self.subscription = Subscription(**subscriptions[0])
+        
+        super(Customer, self).__init__()
+    
+    def __repr__(self):
+        return 'Customer: %s %s (%s)' % (
+            self.first_name,
+            self.last_name,
+            self.code
+        )
+        
+        

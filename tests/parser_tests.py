@@ -210,7 +210,7 @@ class ParserTests(unittest.TestCase):
                 'notes': '',
                 'referer': '',
                 'referer_host': '',
-                'subsciptions': [   {   'canceled_datetime': None,
+                'subscriptions': [   {   'canceled_datetime': None,
                                         'cc_address': '',
                                         'cc_city': '',
                                         'cc_company': '',
