@@ -85,6 +85,7 @@ class Client(object):
             
             raise exception_class(response, content)
         
-        return response, content
+        response.content = content
+        return response
         
         

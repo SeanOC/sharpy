@@ -78,7 +78,7 @@ class ClientTests(unittest.TestCase):
     def test_make_request(self):
         path = 'plans/get'
         client = self.get_client()
-        response, content = client.make_request(path)
+        response = client.make_request(path)
         
         self.assertEquals(response.status, 200)
     

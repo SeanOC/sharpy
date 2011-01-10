@@ -7,7 +7,7 @@ from dateutil.tz import tzutc
 from nose.tools import raises
 
 from sharpy.exceptions import ParseError
-from sharpy.parsers import CheddarOutputParser, parse_error
+from sharpy.parsers import CheddarOutputParser, parse_error, PlansParser
 
 class ParserTests(unittest.TestCase):
     
@@ -104,3 +104,44 @@ class ParserTests(unittest.TestCase):
         result = parse_error(error_xml)
         
         self.assertEquals(expected, result)
+        
+    def test_plans_parser(self):
+        plans_xml = self.load_file('plans.xml')
+        parser = PlansParser()
+        
+        expected = [   {   'billing_frequency': 'monthly',
+                'billing_frequency_per': 'month',
+                'billing_frequency_quantity': 1,
+                'billing_frequency_unit': 'months',
+                'code': 'FREE_MONTHLY',
+                'created_datetime': datetime(2011, 1, 7, 20, 46, 43, tzinfo=tzutc()),
+                'description': 'A free monthly plan',
+                'id': '6b0d13f4-6bef-102e-b098-40402145ee8b',
+                'is_active': True,
+                'is_free': True,
+                'name': 'Free Monthly',
+                'recurring_charge_amount': Decimal('0.00'),
+                'recurring_charge_code': 'FREE_MONTHLY_RECURRING',
+                'setup_charge_amount': Decimal('0.00'),
+                'setup_charge_code': '',
+                'trial_days': 0},
+            {   'billing_frequency': 'monthly',
+                'billing_frequency_per': 'month',
+                'billing_frequency_quantity': 1,
+                'billing_frequency_unit': 'months',
+                'code': 'PAID_MONTHLY',
+                'created_datetime': datetime(2011, 1, 7, 21, 5, 42, tzinfo=tzutc()),
+                'description': '',
+                'id': '11af9cfc-6bf2-102e-b098-40402145ee8b',
+                'is_active': True,
+                'is_free': False,
+                'name': 'Paid Monthly',
+                'recurring_charge_amount': Decimal('20.00'),
+                'recurring_charge_code': 'PAID_MONTHLY_RECURRING',
+                'setup_charge_amount': Decimal('0.00'),
+                'setup_charge_code': '',
+                'trial_days': 0}]
+        result = parser.parse_xml(plans_xml)
+        
+        self.assertEquals(expected, result)
+        
