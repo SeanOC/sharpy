@@ -7,7 +7,7 @@ from dateutil.tz import tzutc
 from nose.tools import raises
 
 from sharpy.exceptions import ParseError
-from sharpy.parsers import CheddarOutputParser
+from sharpy.parsers import CheddarOutputParser, parse_error
 
 class ParserTests(unittest.TestCase):
     
@@ -90,3 +90,17 @@ class ParserTests(unittest.TestCase):
         parser = CheddarOutputParser()
         
         parser.parse_datetime('test')
+        
+    
+    def test_error_parser(self):
+        error_xml = self.load_file('error.xml')
+        
+        expected = {
+            'aux_code': '',
+            'code': '400',
+            'id': '149947',
+            'message': 'No product selected. Need a productId or productCode.',
+        }
+        result = parse_error(error_xml)
+        
+        self.assertEquals(expected, result)
