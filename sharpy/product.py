@@ -53,89 +53,14 @@ class CheddarProduct(object):
                         cc_country=None, cc_address=None, cc_city=None, \
                         cc_state=None, cc_zip=None, charges=None, items=None):
                         
-        # Required data
-        data = {
-            'code': code,
-            'firstName': first_name,
-            'lastName': last_name,
-            'email': email,
-            'subscription[planCode]': plan_code,
-        }
-        
-        # Optional data
-        if company:
-            data['company'] = company
-            
-        if is_vat_excempt is not None:
-            if is_vat_excempt:
-                data['isVatExcempt'] = 1
-            else:
-                data['isVatExcempt'] = 0
-        
-        if vat_number:
-            data['vatNumber'] = vat_number
-        
-        if notes:
-            data['notes'] = notes
-            
-        if first_contact_datetime:
-            data['firstContactDatetime'] = self.client.format_datetime(first_contact_datetime)
-        
-        if referer:
-            data['referer'] = referer
-        
-        if campaign_term:
-            data['campaignTerm'] = campaign_term
-            
-        if campaign_name:
-            data['campaignName'] = campaign_name
-        
-        if campaign_source:
-            data['campaignSource'] = campaign_source
-        
-        if campaign_content:
-            data['campaignContent'] = campaign_content
-        
-        if meta_data:
-            for key, value in meta_data.iteritems():
-                full_key = 'metaData[%s]' % key
-                data[full_key] = value
-        
-        if initial_bill_date:
-            data['subscription[initialBillDate]'] = self.client.format_datetime(initial_bill_date)
-        
-        if cc_number:
-            data['subscription[ccNumber]'] = cc_number
-        
-        if cc_expiration:
-            data['subscription[ccExpiration]'] = cc_expiration
-        
-        if cc_card_code:
-            data['subscription[ccCardCode]'] = cc_card_code
-        
-        if cc_first_name:
-            data['subscription[ccFirstName]'] = cc_first_name
-        
-        if cc_last_name:
-            data['subscription[ccLastName]'] = cc_last_name
-        
-        if cc_company:
-            data['subscription[ccCompany]'] = cc_company
-        
-        if cc_country:
-            data['subscription[ccCountry]'] = cc_country
-        
-        if cc_address:
-            data['subscription[ccAddress]'] = cc_address
-        
-        if cc_city:
-            data['subscription[ccCity]'] = cc_city
-        
-        if cc_state:
-            data['subscription[ccState]'] = cc_state
-        
-        if cc_zip:
-            data['subscription[ccZip]'] = cc_zip
+        data = self.build_customer_post_data(code, first_name, last_name, \
+                    email, plan_code, company, is_vat_excempt, vat_number, \
+                    notes, first_contact_datetime, referer, campaign_term, \
+                    campaign_name, campaign_source, campaign_medium, \
+                    campaign_content, meta_data, initial_bill_date, \
+                    cc_number, cc_expiration, cc_card_code, cc_first_name, \
+                    cc_last_name, cc_company, cc_country, cc_address, \
+                    cc_city, cc_state, cc_zip)
         
         if charges:
             for i, charge in enumerate(charges):
@@ -143,7 +68,7 @@ class CheddarProduct(object):
                 data['charges[%d][quantity]' % i] = charge.get('quantity', 1)
                 data['charges[%d][eachAmount]' % i] = charge['each_amount']
                 data['charges[%d][description]' % i] = charge.get('description', '')
-        
+
         if items:
             for i, item in enumerate(items):
                 data['items[%d][itemCode]' % i] = item['code']
@@ -155,6 +80,117 @@ class CheddarProduct(object):
         customer = Customer(product=self, **customers_data[0])
         
         return customer
+        
+    def build_customer_post_data(self, code=None, first_name=None,\
+                last_name=None, email=None, plan_code=None, \
+                company=None, is_vat_excempt=None, vat_number=None, \
+                notes=None, first_contact_datetime=None, \
+                referer=None, campaign_term=None, \
+                campaign_name=None, campaign_source=None, \
+                campaign_medium=None, campaign_content=None, \
+                meta_data=None, initial_bill_date=None, \
+                cc_number=None, cc_expiration=None, \
+                cc_card_code=None, cc_first_name=None, \
+                cc_last_name=None, cc_company=None, \
+                cc_country=None, cc_address=None, cc_city=None, \
+                cc_state=None, cc_zip=None, bill_date=None):
+        
+        data = {}
+        
+        if code:
+            data['code'] = code
+        
+        if first_name:
+            data['firstName'] = first_name
+        
+        if last_name:
+            data['lastName'] = last_name
+            
+        if email:
+            data['email'] = email
+        
+        if plan_code:
+            data['subscription[planCode]'] = plan_code
+        
+        if company:
+            data['company'] = company
+
+        if is_vat_excempt is not None:
+            if is_vat_excempt:
+                data['isVatExcempt'] = 1
+            else:
+                data['isVatExcempt'] = 0
+
+        if vat_number:
+            data['vatNumber'] = vat_number
+
+        if notes:
+            data['notes'] = notes
+
+        if first_contact_datetime:
+            data['firstContactDatetime'] = self.client.format_datetime(first_contact_datetime)
+
+        if referer:
+            data['referer'] = referer
+
+        if campaign_term:
+            data['campaignTerm'] = campaign_term
+
+        if campaign_name:
+            data['campaignName'] = campaign_name
+
+        if campaign_source:
+            data['campaignSource'] = campaign_source
+
+        if campaign_content:
+            data['campaignContent'] = campaign_content
+
+        if meta_data:
+            for key, value in meta_data.iteritems():
+                full_key = 'metaData[%s]' % key
+                data[full_key] = value
+
+        if initial_bill_date:
+            data['subscription[initialBillDate]'] = self.client.format_datetime(initial_bill_date)
+
+        if cc_number:
+            data['subscription[ccNumber]'] = cc_number
+
+        if cc_expiration:
+            data['subscription[ccExpiration]'] = cc_expiration
+
+        if cc_card_code:
+            data['subscription[ccCardCode]'] = cc_card_code
+
+        if cc_first_name:
+            data['subscription[ccFirstName]'] = cc_first_name
+
+        if cc_last_name:
+            data['subscription[ccLastName]'] = cc_last_name
+
+        if cc_company:
+            data['subscription[ccCompany]'] = cc_company
+
+        if cc_country:
+            data['subscription[ccCountry]'] = cc_country
+
+        if cc_address:
+            data['subscription[ccAddress]'] = cc_address
+
+        if cc_city:
+            data['subscription[ccCity]'] = cc_city
+
+        if cc_state:
+            data['subscription[ccState]'] = cc_state
+
+        if cc_zip:
+            data['subscription[ccZip]'] = cc_zip
+            
+        
+        if bill_date:
+            data['subscription[changeBillDate]'] = self.client.format_datetime(bill_date)
+
+        return data
         
     def get_customers(self):
         customers = []
@@ -224,6 +260,38 @@ class Customer(object):
                  campaign_content=None, campaign_name=None, \
                  created_datetime=None, modified_datetime=None, \
                  meta_data=None, subscriptions=None):
+                 
+        self.load_data(code=code,
+                       first_name=first_name, last_name=last_name,
+                       email=email, product=product, id=id,
+                       company=company, notes=notes,
+                       gateway_token=gateway_token,
+                       is_vat_excempt=is_vat_excempt,
+                       vat_number=vat_number,
+                       first_contact_datetime=first_contact_datetime,
+                       referer=referer, referer_host=referer_host,
+                       campaign_source=campaign_source,
+                       campaign_medium=campaign_medium,
+                       campaign_term=campaign_term,
+                       campaign_content=campaign_content,
+                       campaign_name=campaign_name,
+                       created_datetime=created_datetime,
+                       modified_datetime=modified_datetime,
+                       meta_data=meta_data,
+                       subscriptions=subscriptions
+                      )
+        
+        super(Customer, self).__init__()
+        
+    def load_data(self, code, first_name, last_name, email, product, id=None,\
+                  company=None, notes=None, gateway_token=None, \
+                  is_vat_excempt=None, vat_number=None, \
+                  first_contact_datetime=None, referer=None, \
+                  referer_host=None, campaign_source=None, \
+                  campaign_medium=None, campaign_term=None, \
+                  campaign_content=None, campaign_name=None, \
+                  created_datetime=None, modified_datetime=None, \
+                  meta_data=None, subscriptions=None):
         self.code = code
         self.id = id
         self.first_name = first_name
@@ -244,16 +312,58 @@ class Customer(object):
         self.campaign_name = campaign_name
         self.created = created_datetime
         self.modified = modified_datetime
-        
+
         self.meta_data = {}
         if meta_data:
-            for datum in meta_data:
-                self.meta_data[datum['name']] = datum['value']
+          for datum in meta_data:
+              self.meta_data[datum['name']] = datum['value']
         subscription_data = subscriptions[0]
         subscription_data['customer'] = self
         self.subscription = Subscription(**subscription_data)
         
-        super(Customer, self).__init__()
+    def update(self, first_name=None, last_name=None, email=None, \
+                company=None, is_vat_excempt=None, vat_number=None, \
+                notes=None, first_contact_datetime=None, \
+                referer=None, campaign_term=None, \
+                campaign_name=None, campaign_source=None, \
+                campaign_medium=None, campaign_content=None, \
+                meta_data=None,
+                cc_number=None, cc_expiration=None, \
+                cc_card_code=None, cc_first_name=None, \
+                cc_last_name=None, cc_company=None, \
+                cc_country=None, cc_address=None, cc_city=None, \
+                cc_state=None, cc_zip=None, plan_code=None, bill_date=None ):
+        
+        data = self.product.build_customer_post_data( first_name=first_name,
+                        last_name=last_name, email=email, plan_code=plan_code,
+                        company=company, is_vat_excempt=is_vat_excempt,
+                        vat_number=vat_number, notes=notes, referer=referer,
+                        campaign_term=campaign_term,
+                        campaign_name=campaign_name,
+                        campaign_source=campaign_source,
+                        campaign_medium=campaign_medium,
+                        campaign_content=campaign_content,
+                        meta_data=meta_data,
+                        cc_number=cc_number, cc_expiration=cc_expiration,
+                        cc_card_code=cc_card_code,
+                        cc_first_name=cc_first_name,
+                        cc_last_name=cc_last_name, cc_company=cc_company,
+                        cc_country=cc_country, cc_address=cc_address,
+                        cc_city=cc_city, cc_state=cc_state, cc_zip=cc_zip)
+        
+        path = 'customers/edit'
+        params = {'code': self.code}
+        
+        response = self.product.client.make_request(
+            path = path,
+            params = params,
+            data = data,
+        )
+        cusotmer_parser = CustomersParser()
+        customers_data = cusotmer_parser.parse_xml(response.content)
+        customer_data = customers_data[0]
+        self.load_data(product=self.product, **customer_data)
+        
     
     def __repr__(self):
         return u'Customer: %s %s (%s)' % (

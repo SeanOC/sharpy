@@ -244,3 +244,15 @@ class ProductTests(unittest.TestCase):
         self.assertEquals(created_customer.first_name, fetched_customer.first_name)
         self.assertEquals(created_customer.last_name, fetched_customer.last_name)
         self.assertEquals(created_customer.email, fetched_customer.email)
+        
+    @clear_users
+    def test_simple_customer_update(self):
+        new_name = 'Different'
+        customer = self.get_customer()
+        product = self.get_product()
+        
+        customer.update(first_name=new_name)
+        self.assertEquals(new_name, customer.first_name)
+        
+        fetched_customer = product.get_customer(code=customer.code)
+        self.assertEquals(customer.first_name, fetched_customer.first_name)
