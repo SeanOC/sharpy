@@ -232,3 +232,15 @@ class ProductTests(unittest.TestCase):
         fetched_customers = product.get_customers()
         
         self.assertEquals(2, len(fetched_customers))
+        
+    @clear_users
+    def test_get_customer(self):
+        created_customer = self.get_customer()
+        product = self.get_product()
+        
+        fetched_customer = product.get_customer(code=created_customer.code)
+        
+        self.assertEquals(created_customer.code, fetched_customer.code)
+        self.assertEquals(created_customer.first_name, fetched_customer.first_name)
+        self.assertEquals(created_customer.last_name, fetched_customer.last_name)
+        self.assertEquals(created_customer.email, fetched_customer.email)
