@@ -42,3 +42,7 @@ CheddarProduct
     
     :param code: The code for the desired plan.
     
+    .. automethod:: create_customer
+    
+    Creates a customer 
+    

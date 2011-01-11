@@ -1,4 +1,5 @@
 from copy import copy
+from decimal import Decimal, getcontext as get_decimal_context
 
 from sharpy.client import Client
 from sharpy.exceptions import NotFound
@@ -236,12 +237,36 @@ class CheddarProduct(object):
         
 class PricingPlan(object):
     
-    def __init__(self, name, code, id, description, is_active, is_free, \
-                 trial_days, billing_frequency, billing_frequency_per, \
-                 billing_frequency_quantity, billing_frequency_unit,  \
-                 setup_charge_code, setup_charge_amount, \
-                 recurring_charge_code, recurring_charge_amount, \
+    def __init__(self, name, code, id, description, is_active, is_free,
+                 trial_days, billing_frequency, billing_frequency_per,
+                 billing_frequency_quantity, billing_frequency_unit,
+                 setup_charge_code, setup_charge_amount,
+                 recurring_charge_code, recurring_charge_amount,
                  created_datetime, items, subscription=None):
+        
+        self.load_data(name=name, code=code, id=id, description=description,
+                        is_active=is_active, is_free=is_free,
+                        trial_days=trial_days,
+                        billing_frequency=billing_frequency,
+                        billing_frequency_per=billing_frequency_per,
+                        billing_frequency_quantity=billing_frequency_quantity,
+                        billing_frequency_unit=billing_frequency_unit,
+                        setup_charge_code=setup_charge_code,
+                        setup_charge_amount=setup_charge_amount,
+                        recurring_charge_code=recurring_charge_code,
+                        recurring_charge_amount=recurring_charge_amount,
+                        created_datetime=created_datetime, items=items,
+                        subscription=subscription)
+        
+        super(PricingPlan, self).__init__()
+        
+    def load_data(self, name, code, id, description, is_active, is_free,
+                 trial_days, billing_frequency, billing_frequency_per,
+                 billing_frequency_quantity, billing_frequency_unit,
+                 setup_charge_code, setup_charge_amount,
+                 recurring_charge_code, recurring_charge_amount,
+                 created_datetime, items, subscription=None):
+                 
         self.name = name
         self.code = code
         self.id = id
@@ -259,11 +284,9 @@ class PricingPlan(object):
         self.recurring_charge_amount = recurring_charge_amount
         self.created = created_datetime
         self.items = items
-        
+
         if subscription:
             self.subscription = subscription
-        
-        super(PricingPlan, self).__init__()
         
     def __repr__(self):
         return u'PricingPlan: %s (%s)' % (self.name, self.code)
@@ -338,7 +361,16 @@ class Customer(object):
               self.meta_data[datum['name']] = datum['value']
         subscription_data = subscriptions[0]
         subscription_data['customer'] = self
-        self.subscription = Subscription(**subscription_data)
+        if hasattr(self, 'subscription'):
+            self.subscription.load_data(**subscription_data)
+        else:
+            self.subscription = Subscription(**subscription_data)
+        
+    def load_data_from_xml(self, xml):
+        cusotmer_parser = CustomersParser()
+        customers_data = cusotmer_parser.parse_xml(xml)
+        customer_data = customers_data[0]
+        self.load_data(product=self.product, **customer_data)
         
     def update(self, first_name=None, last_name=None, email=None, \
                 company=None, is_vat_excempt=None, vat_number=None, \
@@ -378,10 +410,8 @@ class Customer(object):
             params = params,
             data = data,
         )
-        cusotmer_parser = CustomersParser()
-        customers_data = cusotmer_parser.parse_xml(response.content)
-        customer_data = customers_data[0]
-        self.load_data(product=self.product, **customer_data)
+        return self.load_data_from_xml(response.content)
+        
         
     def delete(self):
         path = 'customers/delete'
@@ -402,11 +432,33 @@ class Customer(object):
     
 class Subscription(object):
     
-    def __init__(self, id, gateway_token, cc_first_name, cc_last_name, \
+    def __init__(self, id, gateway_token, cc_first_name, cc_last_name,
+                 cc_company, cc_country, cc_address, cc_city, cc_state,
+                 cc_zip, cc_type, cc_last_four, cc_expiration_date, customer,
+                 canceled_datetime=None ,created_datetime=None,
+                 plans=None, invoices=None, items=None):
+        
+        self.load_data(id=id, gateway_token=gateway_token, 
+                        cc_first_name=cc_first_name,
+                        cc_last_name=cc_last_name, 
+                        cc_company=cc_company, cc_country=cc_country,
+                        cc_address=cc_address, cc_city=cc_city,
+                        cc_state=cc_state, cc_zip=cc_zip, cc_type=cc_type,
+                        cc_last_four=cc_last_four,
+                        cc_expiration_date=cc_expiration_date,
+                        customer=customer,
+                        canceled_datetime=canceled_datetime, 
+                        created_datetime=created_datetime, plans=plans,
+                        invoices=invoices, items=items)
+        
+        super(Subscription, self).__init__()
+        
+    def load_data(self, id, gateway_token, cc_first_name, cc_last_name, \
                  cc_company, cc_country, cc_address, cc_city, cc_state, \
                  cc_zip, cc_type, cc_last_four, cc_expiration_date, customer,\
                  canceled_datetime=None ,created_datetime=None, \
                  plans=None, invoices=None, items=None):
+                 
         self.id = id
         self.gateway_token = gateway_token
         self.cc_first_name = cc_first_name
@@ -424,7 +476,7 @@ class Subscription(object):
         self.created = created_datetime
         self.invoices = invoices
         self.customer = customer
-        
+
         # Organize item data into something more useful
         items_map = {}
         for item in items:
@@ -433,19 +485,26 @@ class Subscription(object):
         for item in plan_data['items']:
             items_map[item['code']]['plan_data'] = item
         
-        self.items = {}
+        if not hasattr(self, 'items'):
+            self.items = {}
         for code, item_map in items_map.iteritems():
             plan_item_data = item_map['plan_data']
             subscription_item_data = item_map['subscription_data']
             item_data = copy(plan_item_data)
             item_data.update(subscription_item_data)
             item_data['subscription'] = self
-            self.items[code] = Item(**item_data)
-        
+            
+            if code in self.items.keys():
+                item = self.items[code]
+                item.load_data(**item_data)
+            else:
+                self.items[code] = Item(**item_data)
+
         plan_data['subscription'] = self
-        self.plan = PricingPlan(**plan_data)
-        
-        super(Subscription, self).__init__()
+        if hasattr(self, 'plan'):
+            self.plan.load_data(**plan_data)
+        else:
+            self.plan = PricingPlan(**plan_data)
     
     def __repr__(self):
         return u'Subscription: %s' % self.id
@@ -467,10 +526,24 @@ class Subscription(object):
         
 class Item(object):
     
-    def __init__(self, code, subscription, id=None, name=None, \
-                 quantity_included=None, is_periodic=None, \
-                 overage_amount=None, created_datetime=None, \
+    def __init__(self, code, subscription, id=None, name=None,
+                 quantity_included=None, is_periodic=None,
+                 overage_amount=None, created_datetime=None,
                  modified_datetime=None, quantity=None):
+                 
+        self.load_data(code=code, subscription=subscription, id=id, name=name,
+                      quantity_included=quantity_included,
+                      is_periodic=is_periodic, overage_amount=overage_amount,
+                      created_datetime=created_datetime,
+                      modified_datetime=modified_datetime, quantity=quantity)
+        
+        super(Item, self).__init__()
+        
+    def load_data(self, code, subscription, id=None, name=None,
+                 quantity_included=None, is_periodic=None,
+                 overage_amount=None, created_datetime=None,
+                 modified_datetime=None, quantity=None):
+                 
         self.code = code
         self.subscription = subscription
         self.id = id
@@ -481,11 +554,35 @@ class Item(object):
         self.overage_amount = overage_amount
         self.created = created_datetime
         self.modified = modified_datetime
-        
-        super(Item, self).__init__()
     
     def __repr__(self):
         return u'Item: %s for %s' % (
             self.code,
             self.subscription.customer.code,
         )
+        
+    def increment(self, quantity=None):
+        '''
+        Increment the item's quantity by the passed in amount.  If nothing is
+        passed in, a quantity of 1 is assumed.  If a decimal value is passsed
+        in, it is rounded to the 4th decimal place as that is the level of 
+        precision which the Cheddar API accepts.
+        '''
+        data = {}
+        
+        if quantity is not None:
+            quantity = Decimal(quantity)
+            quantity = quantity.quantize(Decimal('.0001'))
+            data['quantity'] = quantity
+         
+        response = self.subscription.customer.product.client.make_request(
+            path = 'customers/add-item-quantity',
+            params = {
+                'code': self.subscription.customer.code,
+                'itemCode': self.code,
+            },
+            data = data,
+            method = 'POST',
+        )
+        
+        return self.subscription.customer.load_data_from_xml(response.content)

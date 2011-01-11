@@ -120,7 +120,7 @@ class PlansParser(CheddarOutputParser):
         item['id'] = item_element.attrib['id']
         item['code'] = item_element.attrib['code']
         item['name'] = item_element.findtext('name')
-        item['quantity_included'] = self.parse_int(item_element.findtext('quantityIncluded'))
+        item['quantity_included'] = self.parse_decimal(item_element.findtext('quantityIncluded'))
         item['is_periodic'] = self.parse_bool(item_element.findtext('isPeriodic'))
         item['overage_amount'] = self.parse_decimal(item_element.findtext('overageAmount'))
         item['created_datetime'] = self.parse_datetime(item_element.findtext('createdDatetime'))
@@ -278,7 +278,7 @@ class CustomersParser(CheddarOutputParser):
         charge['id'] = charge_element.attrib['id']
         charge['code'] = charge_element.attrib['code']
         charge['type'] = charge_element.findtext('type')
-        charge['quantity'] = self.parse_int(charge_element.findtext('quantity'))
+        charge['quantity'] = self.parse_decimal(charge_element.findtext('quantity'))
         charge['each_amount'] = self.parse_decimal(charge_element.findtext('eachAmount'))
         charge['description'] = charge_element.findtext('description')
         charge['created_datetime'] = self.parse_datetime(charge_element.findtext('createdDatetime'))
@@ -300,7 +300,7 @@ class CustomersParser(CheddarOutputParser):
         item['id'] = item_element.attrib['id']
         item['code'] = item_element.attrib['code']
         item['name'] = item_element.findtext('name')
-        item['quantity'] = self.parse_int(item_element.findtext('quantity'))
+        item['quantity'] = self.parse_decimal(item_element.findtext('quantity'))
         item['created_datetime'] = self.parse_datetime(item_element.findtext('createdDatetime'))
         item['modified_datetime'] = self.parse_datetime(item_element.findtext('modifiedDatetime'))
         

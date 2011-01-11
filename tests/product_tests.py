@@ -88,6 +88,21 @@ class ProductTests(unittest.TestCase):
         customer = product.create_customer(**customer_data)
         
         return customer
+        
+    def get_customer_with_items(self, **kwargs):
+        data = copy(self.paid_defaults)
+        if 'items' in kwargs.keys():
+            items = kwargs['items']
+        else:
+            items = []
+            items.append({'code': 'MONTHLY_ITEM', 'quantity': 3})
+            items.append({'code': 'ONCE_ITEM'})
+        
+        data['items'] = items
+        data['plan_code'] = 'TRACKED_MONTHLY'
+        customer = self.get_customer(**data)
+        
+        return customer
     
     @clear_users
     def test_simple_create_customer(self):
@@ -203,14 +218,7 @@ class ProductTests(unittest.TestCase):
         
     @clear_users
     def test_item_repr(self):
-        data = copy(self.paid_defaults)
-        items = []
-        items.append({'code': 'MONTHLY_ITEM', 'quantity': 3})
-        items.append({'code': 'ONCE_ITEM'})
-        data['items'] = items
-        data['plan_code'] = 'TRACKED_MONTHLY'
-        customer = self.get_customer(**data)
-        
+        customer = self.get_customer_with_items()
         subscription = customer.subscription
         item = subscription.items['MONTHLY_ITEM']
         
@@ -299,3 +307,34 @@ class ProductTests(unittest.TestCase):
         
         self.assertLess(diff, limit)
         
+    def assert_increment(self, quantity=None):
+        customer = self.get_customer_with_items()
+        product = self.get_product()
+        item = customer.subscription.items.values()[0]
+        
+        old_quantity = item.quantity_used
+        item.increment(quantity)
+        new_quantity = item.quantity_used
+        diff = new_quantity - old_quantity
+        expected = Decimal(quantity or 1)
+        self.assertAlmostEqual(expected, diff, places=2)
+        
+        fetched_customer = product.get_customer(code=customer.code)
+        fetched_item = customer.subscription.items[item.code]
+        self.assertEquals(item.quantity_used, fetched_item.quantity_used)
+        
+    @clear_users
+    def test_simple_increment(self):
+        self.assert_increment()
+        
+    @clear_users
+    def test_int_increment(self):
+        self.assert_increment(1)
+        
+    @clear_users
+    def test_float_increment(self):
+        self.assert_increment(1.234)
+    
+    @clear_users
+    def test_decimal_increment(self):
+        self.assert_increment(Decimal('1.234'))
