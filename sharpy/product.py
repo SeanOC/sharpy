@@ -1,3 +1,5 @@
+from copy import copy
+
 from sharpy.client import Client
 from sharpy.parsers import PlansParser, CustomersParser
 
@@ -164,7 +166,7 @@ class PricingPlan(object):
                  billing_frequency_quantity, billing_frequency_unit,  \
                  setup_charge_code, setup_charge_amount, \
                  recurring_charge_code, recurring_charge_amount, \
-                 created_datetime, items):
+                 created_datetime, items, subscription=None):
         self.name = name
         self.code = code
         self.id = id
@@ -180,8 +182,11 @@ class PricingPlan(object):
         self.setup_charge_amount = setup_charge_amount
         self.recurring_charge_code = recurring_charge_code
         self.recurring_charge_amount = recurring_charge_amount
-        self.created= created_datetime
+        self.created = created_datetime
         self.items = items
+        
+        if subscription:
+            self.subscription = subscription
         
         super(PricingPlan, self).__init__()
         
@@ -221,10 +226,12 @@ class Customer(object):
         self.modified = modified_datetime
         
         self.meta_data = {}
-        for datum in meta_data:
-            self.meta_data[datum['name']] = datum['value']
-        
-        self.subscription = Subscription(**subscriptions[0])
+        if meta_data:
+            for datum in meta_data:
+                self.meta_data[datum['name']] = datum['value']
+        subscription_data = subscriptions[0]
+        subscription_data['customer'] = self
+        self.subscription = Subscription(**subscription_data)
         
         super(Customer, self).__init__()
     
@@ -239,7 +246,7 @@ class Subscription(object):
     
     def __init__(self, id, gateway_token, cc_first_name, cc_last_name, \
                  cc_company, cc_country, cc_address, cc_city, cc_state, \
-                 cc_zip, cc_type, cc_last_four, cc_expiration_date, \
+                 cc_zip, cc_type, cc_last_four, cc_expiration_date, customer,\
                  canceled_datetime=None ,created_datetime=None, \
                  plans=None, invoices=None, items=None):
         self.id = id
@@ -257,12 +264,55 @@ class Subscription(object):
         self.cc_expiration_date = cc_expiration_date
         self.canceled = canceled_datetime
         self.created = created_datetime
-        self.items = items
+        self.invoices = invoices
+        self.customer = customer
         
-        self.plan = PricingPlan(**plans[0])
+        # Organize item data into something more useful
+        items_map = {}
+        for item in items:
+            items_map[item['code']] = {'subscription_data': item}
+        plan_data = plans[0]
+        for item in plan_data['items']:
+            items_map[item['code']]['plan_data'] = item
+        
+        self.items = {}
+        for code, item_map in items_map.iteritems():
+            plan_item_data = item_map['plan_data']
+            subscription_item_data = item_map['subscription_data']
+            item_data = copy(plan_item_data)
+            item_data.update(subscription_item_data)
+            item_data['subscription'] = self
+            self.items[code] = Item(**item_data)
+        
+        plan_data['subscription'] = self
+        self.plan = PricingPlan(**plan_data)
         
         super(Subscription, self).__init__()
     
     def __repr__(self):
         return u'Subscription: %s' % self.id
         
+class Item(object):
+    
+    def __init__(self, code, subscription, id=None, name=None, \
+                 quantity_included=None, is_periodic=None, \
+                 overage_amount=None, created_datetime=None, \
+                 modified_datetime=None, quantity=None):
+        self.code = code
+        self.subscription = subscription
+        self.id = id
+        self.name = name
+        self.quantity_included = quantity_included
+        self.quantity_used = quantity
+        self.is_periodic = is_periodic
+        self.overage_amount = overage_amount
+        self.created = created_datetime
+        self.modified = modified_datetime
+        
+        super(Item, self).__init__()
+    
+    def __repr__(self):
+        return u'Item: %s for %s' % (
+            self.code,
+            self.subscription.customer.code,
+        )

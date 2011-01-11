@@ -198,3 +198,21 @@ class ProductTests(unittest.TestCase):
         self.assertEquals(expected, result)
         
         
+    @clear_users
+    def test_item_repr(self):
+        data = copy(self.paid_defaults)
+        items = []
+        items.append({'code': 'MONTHLY_ITEM', 'quantity': 3})
+        items.append({'code': 'ONCE_ITEM'})
+        data['items'] = items
+        data['plan_code'] = 'TRACKED_MONTHLY'
+        customer = self.get_customer(**data)
+        
+        subscription = customer.subscription
+        item = subscription.items['MONTHLY_ITEM']
+        
+        expected = 'Item: MONTHLY_ITEM for test'
+        result = repr(item)
+        
+        self.assertEquals(expected, result)
+        
