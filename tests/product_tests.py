@@ -4,8 +4,10 @@ from decimal import Decimal
 import unittest
 
 from testconfig import config
+from nose.tools import raises
 
 from sharpy.product import CheddarProduct
+from sharpy.exceptions import NotFound
 
 from testing_tools.decorators import clear_users
 
@@ -256,3 +258,17 @@ class ProductTests(unittest.TestCase):
         
         fetched_customer = product.get_customer(code=customer.code)
         self.assertEquals(customer.first_name, fetched_customer.first_name)
+        
+    @clear_users
+    @raises(NotFound)
+    def test_delete_customer(self):
+        customer = self.get_customer()
+        product = self.get_product()
+        
+        fetched_customer = product.get_customer(code=customer.code)
+        self.assertEquals(customer.first_name, fetched_customer.first_name)
+        
+        customer.delete()
+        fetched_customer = product.get_customer(code=customer.code)
+        
+        

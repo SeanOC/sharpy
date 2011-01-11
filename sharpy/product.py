@@ -364,6 +364,14 @@ class Customer(object):
         customer_data = customers_data[0]
         self.load_data(product=self.product, **customer_data)
         
+    def delete(self):
+        path = 'customers/delete'
+        params = {'code': self.code}
+        response = self.product.client.make_request(
+            path = path,
+            params = params,
+        )
+        
     
     def __repr__(self):
         return u'Customer: %s %s (%s)' % (
