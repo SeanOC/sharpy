@@ -310,7 +310,7 @@ class ProductTests(unittest.TestCase):
     def assert_increment(self, quantity=None):
         customer = self.get_customer_with_items()
         product = self.get_product()
-        item = customer.subscription.items.values()[0]
+        item = customer.subscription.items['MONTHLY_ITEM']
         
         old_quantity = item.quantity_used
         item.increment(quantity)
@@ -338,3 +338,35 @@ class ProductTests(unittest.TestCase):
     @clear_users
     def test_decimal_increment(self):
         self.assert_increment(Decimal('1.234'))
+        
+    def assert_decrement(self, quantity=None):
+        customer = self.get_customer_with_items()
+        product = self.get_product()
+        item = customer.subscription.items['MONTHLY_ITEM']
+        
+        old_quantity = item.quantity_used
+        item.decrement(quantity)
+        new_quantity = item.quantity_used
+        diff = old_quantity - new_quantity
+        expected = Decimal(quantity or 1)
+        self.assertAlmostEqual(expected, diff, places=2)
+        
+        fetched_customer = product.get_customer(code=customer.code)
+        fetched_item = customer.subscription.items[item.code]
+        self.assertEquals(item.quantity_used, fetched_item.quantity_used)
+        
+    @clear_users
+    def test_simple_decrement(self):
+        self.assert_decrement()
+        
+    @clear_users
+    def test_int_decrement(self):
+        self.assert_decrement(1)
+        
+    @clear_users
+    def test_float_decrement(self):
+        self.assert_decrement(1.234)
+    
+    @clear_users
+    def test_decimal_decrement(self):
+        self.assert_decrement(Decimal('1.234'))
