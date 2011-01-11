@@ -2,3 +2,4 @@
 .coverage
 cover
 tests/config.ini
+.noseids
