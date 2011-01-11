@@ -1,6 +1,7 @@
 from copy import copy
 
 from sharpy.client import Client
+from sharpy.exceptions import NotFound
 from sharpy.parsers import PlansParser, CustomersParser
 
 class CheddarProduct(object):
@@ -195,11 +196,16 @@ class CheddarProduct(object):
     def get_customers(self):
         customers = []
         
-        response = self.client.make_request(path='customers/get')
-        cusotmer_parser = CustomersParser()
-        customers_data = cusotmer_parser.parse_xml(response.content)
-        for customer_data in customers_data:
-            customers.append(Customer(product=self, **customer_data))
+        try:
+            response = self.client.make_request(path='customers/get')
+        except NotFound:
+            response = None
+        
+        if response:
+            cusotmer_parser = CustomersParser()
+            customers_data = cusotmer_parser.parse_xml(response.content)
+            for customer_data in customers_data:
+                customers.append(Customer(product=self, **customer_data))
             
         return customers
         
@@ -213,6 +219,19 @@ class CheddarProduct(object):
         customers_data = cusotmer_parser.parse_xml(response.content)
         
         return Customer(product=self, **customers_data[0])
+    
+    def delete_all_customers(self):
+        '''
+        This method does exactly what you think it does.  Calling this method
+        deletes all customer data in your cheddar product and the configured
+        gateway.  This action cannot be undone.
+        
+        DO NOT RUN THIS UNLESS YOU REALLY, REALLY, REALLY MEAN TO!
+        '''
+        response = self.client.make_request(
+            path='customers/delete-all/confirm/1',
+            method='POST'
+        )
         
         
 class PricingPlan(object):
@@ -371,6 +390,7 @@ class Customer(object):
             path = path,
             params = params,
         )
+        
         
     
     def __repr__(self):

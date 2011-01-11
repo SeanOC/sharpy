@@ -272,3 +272,16 @@ class ProductTests(unittest.TestCase):
         fetched_customer = product.get_customer(code=customer.code)
         
         
+    @clear_users
+    def test_delete_all_customers(self):
+        customer_1 = self.get_customer()
+        customer_2 = self.get_customer(code='test2')
+        product = self.get_product()
+        
+        fetched_customers = product.get_customers()
+        self.assertEquals(2, len(fetched_customers))
+        
+        product.delete_all_customers()
+        
+        fetched_customers = product.get_customers()
+        self.assertEquals(0, len(fetched_customers))

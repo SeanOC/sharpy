@@ -50,7 +50,7 @@ class Client(object):
         return str_dt
         
     
-    def make_request(self, path, params=None, data=None):
+    def make_request(self, path, params=None, data=None, method=None):
         '''
         Makes a request to the cheddar api using the authentication and 
         configuration settings available.
@@ -65,7 +65,7 @@ class Client(object):
                 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
         else:
-            method = 'GET'
+            method = method or 'GET'
             body = None
             headers = None
             
@@ -76,7 +76,7 @@ class Client(object):
         # Make request
         response, content = h.request(url, method, body=body, headers=headers)
         status = response.status
-        if status != 200:
+        if status != 200 and status != 302:
             exception_class = CheddarError
             if status == 401:
                 exception_class = AccessDenied
