@@ -19,6 +19,11 @@ Sharpy offers a number of advantages:
 * Will have complete documentation soon.
 * Supports most of the Cheddar and will the full Cheddar Getter API soon.
 
+That all being said, sharpy is still very new and is likely to undergo some 
+significant API changes in the near future.  The code should be fairly safe 
+to use as long as you understand that future releases may not be backwards 
+compatible.
+
 **Get the code for sharpy, read the docs, and submit issues at our Github page:**
 https://github.com/saaspire/sharpy
 
