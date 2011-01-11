@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers>
+  <customer id="a1f143e0-6e65-102e-b098-40402145ee8b" code="test">
+    <firstName>Test</firstName>
+    <lastName>User</lastName>
+    <company/>
+    <email>garbage@saaspire.com</email>
+    <notes/>
+    <gatewayToken>SIMULATED</gatewayToken>
+    <isVatExempt>0</isVatExempt>
+    <vatNumber/>
+    <firstContactDatetime/>
+    <referer/>
+    <refererHost/>
+    <campaignSource/>
+    <campaignMedium/>
+    <campaignTerm/>
+    <campaignContent/>
+    <campaignName/>
+    <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+    <modifiedDatetime>2011-01-10T23:57:58+00:00</modifiedDatetime>
+    <metaData/>
+    <subscriptions>
+      <subscription id="a1f27c60-6e65-102e-b098-40402145ee8b">
+        <plans>
+          <plan id="d19974a6-6e5a-102e-b098-40402145ee8b" code="TRACKED_MONTHLY">
+            <name>Tracked Monthly</name>
+            <description/>
+            <isActive>1</isActive>
+            <isFree>0</isFree>
+            <trialDays>0</trialDays>
+            <billingFrequency>monthly</billingFrequency>
+            <billingFrequencyPer>month</billingFrequencyPer>
+            <billingFrequencyUnit>months</billingFrequencyUnit>
+            <billingFrequencyQuantity>1</billingFrequencyQuantity>
+            <setupChargeCode/>
+            <setupChargeAmount>0.00</setupChargeAmount>
+            <recurringChargeCode>TRACKED_MONTHLY_RECURRING</recurringChargeCode>
+            <recurringChargeAmount>10.00</recurringChargeAmount>
+            <createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+            <items>
+              <item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+                <name>Monthly Item</name>
+                <quantityIncluded>2</quantityIncluded>
+                <isPeriodic>1</isPeriodic>
+                <overageAmount>10.00</overageAmount>
+                <createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+              </item>
+              <item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+                <name>Once Item</name>
+                <quantityIncluded>0</quantityIncluded>
+                <isPeriodic>0</isPeriodic>
+                <overageAmount>10.00</overageAmount>
+                <createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+              </item>
+            </items>
+          </plan>
+        </plans>
+        <gatewayToken>SIMULATED</gatewayToken>
+        <ccFirstName>Test</ccFirstName>
+        <ccLastName>User</ccLastName>
+        <ccCompany>Some Co LLC</ccCompany>
+        <ccCountry>United States</ccCountry>
+        <ccAddress>123 Something St</ccAddress>
+        <ccCity>Someplace</ccCity>
+        <ccState>NY</ccState>
+        <ccZip>12345</ccZip>
+        <ccType>visa</ccType>
+        <ccLastFour>1111</ccLastFour>
+        <ccExpirationDate>2011-07-31T00:00:00+00:00</ccExpirationDate>
+        <canceledDatetime/>
+        <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+        <items>
+          <item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+            <name>Monthly Item</name>
+            <quantity>3</quantity>
+            <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+            <modifiedDatetime>2011-01-10T23:57:58+00:00</modifiedDatetime>
+          </item>
+          <item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+            <name>Once Item</name>
+            <quantity>1</quantity>
+            <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+            <modifiedDatetime>2011-01-10T23:57:58+00:00</modifiedDatetime>
+          </item>
+        </items>
+        <invoices>
+          <invoice id="a1f7faaa-6e65-102e-b098-40402145ee8b">
+            <number>1</number>
+            <type>subscription</type>
+            <vatRate/>
+            <billingDatetime>2011-02-10T23:57:58+00:00</billingDatetime>
+            <paidTransactionId/>
+            <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+            <charges>
+              <charge id="" code="TRACKED_MONTHLY_RECURRING">
+                <type>recurring</type>
+                <quantity>1</quantity>
+                <eachAmount>10.00</eachAmount>
+                <description/>
+                <createdDatetime>2011-02-10T23:57:58+00:00</createdDatetime>
+              </charge>
+              <charge id="" code="MONTHLY_ITEM">
+                <type>item</type>
+                <quantity>1</quantity>
+                <eachAmount>10.00</eachAmount>
+                <description/>
+                <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+              </charge>
+              <charge id="" code="ONCE_ITEM">
+                <type>item</type>
+                <quantity>1</quantity>
+                <eachAmount>10.00</eachAmount>
+                <description/>
+                <createdDatetime>2011-01-10T23:57:58+00:00</createdDatetime>
+              </charge>
+            </charges>
+          </invoice>
+        </invoices>
+      </subscription>
+    </subscriptions>
+  </customer>
+</customers>

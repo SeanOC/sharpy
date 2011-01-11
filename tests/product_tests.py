@@ -186,3 +186,15 @@ class ProductTests(unittest.TestCase):
         
         self.assertIn(expected, result)
         
+    @clear_users
+    def test_pricing_plan_repr(self):
+        customer = self.get_customer()
+        subscription = customer.subscription
+        plan = subscription.plan
+        
+        expected = 'PricingPlan: Free Monthly (FREE_MONTHLY)'
+        result = repr(plan)
+        
+        self.assertEquals(expected, result)
+        
+        

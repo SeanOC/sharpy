@@ -27,7 +27,7 @@ class CheddarOutputParser(object):
     cheddar api.
     '''
     def parse_bool(self, content):
-        if content == '':
+        if content == '' and content is not None:
             value = None
         elif content == '1':
             value = True
@@ -40,7 +40,7 @@ class CheddarOutputParser(object):
         
     def parse_int(self, content):
         value = None
-        if content != '':
+        if content != '' and content is not None:
             try:
                 value = int(content)
             except ValueError:
@@ -50,7 +50,7 @@ class CheddarOutputParser(object):
         
     def parse_decimal(self, content):
         value = None
-        if content != '':
+        if content != '' and content is not None:
             try:
                 value = Decimal(content)
             except InvalidOperation:
@@ -101,7 +101,32 @@ class PlansParser(CheddarOutputParser):
         plan['recurring_charge_amount'] = self.parse_decimal(plan_element.findtext('recurringChargeAmount'))
         plan['created_datetime'] = self.parse_datetime(plan_element.findtext('createdDatetime'))
         
+        plan['items'] = self.parse_plan_items(plan_element.find('items'))
+        
         return plan
+        
+    def parse_plan_items(self, items_element):
+        items = []
+        
+        if items_element is not None:
+            for item_element in items_element:
+                items.append(self.parse_plan_item(item_element))
+        
+        return items
+    
+    def parse_plan_item(self, item_element):
+        item = {}
+        
+        item['id'] = item_element.attrib['id']
+        item['code'] = item_element.attrib['code']
+        item['name'] = item_element.findtext('name')
+        item['quantity_included'] = self.parse_int(item_element.findtext('quantityIncluded'))
+        item['is_periodic'] = self.parse_bool(item_element.findtext('isPeriodic'))
+        item['overage_amount'] = self.parse_decimal(item_element.findtext('overageAmount'))
+        item['created_datetime'] = self.parse_datetime(item_element.findtext('createdDatetime'))
+        
+        return item
+        
         
 class CustomersParser(CheddarOutputParser):
     '''
@@ -202,13 +227,17 @@ class CustomersParser(CheddarOutputParser):
         # Invoices
         subscription['invoices'] = self.parse_invoices(subscription_element.find('invoices'))
         
+        subscription['items'] = self.parse_subscription_items(subscription_element.find('items'))
+        
         return subscription
         
     def parse_plans(self, plans_element):
         plans_parser = PlansParser()
         plans = []
-        for plan_element in plans_element:
-            plans.append(plans_parser.parse_plan(plan_element))
+        
+        if plans_element is not None:
+            for plan_element in plans_element:
+                plans.append(plans_parser.parse_plan(plan_element))
             
         return plans
         
@@ -255,3 +284,25 @@ class CustomersParser(CheddarOutputParser):
         charge['created_datetime'] = self.parse_datetime(charge_element.findtext('createdDatetime'))
         
         return charge
+        
+    def parse_subscription_items(self, items_element):
+        items = []
+        
+        if items_element is not None:
+            for item_element in items_element:
+                items.append(self.parse_subscription_item(item_element))
+            
+        return items
+        
+    def parse_subscription_item(self, item_element):
+        item = {}
+
+        item['id'] = item_element.attrib['id']
+        item['code'] = item_element.attrib['code']
+        item['name'] = item_element.findtext('name')
+        item['quantity'] = self.parse_int(item_element.findtext('quantity'))
+        item['created_datetime'] = self.parse_datetime(item_element.findtext('createdDatetime'))
+        item['modified_datetime'] = self.parse_datetime(item_element.findtext('modifiedDatetime'))
+        
+        return item
+        

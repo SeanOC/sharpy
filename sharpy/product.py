@@ -156,7 +156,6 @@ class CheddarProduct(object):
         
     def get_customers(self):
         response = self.client.make_request(path='customers/get')
-        print response.content
         
 class PricingPlan(object):
     
@@ -165,7 +164,7 @@ class PricingPlan(object):
                  billing_frequency_quantity, billing_frequency_unit,  \
                  setup_charge_code, setup_charge_amount, \
                  recurring_charge_code, recurring_charge_amount, \
-                 created_datetime):
+                 created_datetime, items):
         self.name = name
         self.code = code
         self.id = id
@@ -182,6 +181,7 @@ class PricingPlan(object):
         self.recurring_charge_code = recurring_charge_code
         self.recurring_charge_amount = recurring_charge_amount
         self.created= created_datetime
+        self.items = items
         
         super(PricingPlan, self).__init__()
         
@@ -241,7 +241,7 @@ class Subscription(object):
                  cc_company, cc_country, cc_address, cc_city, cc_state, \
                  cc_zip, cc_type, cc_last_four, cc_expiration_date, \
                  canceled_datetime=None ,created_datetime=None, \
-                 plans=None, invoices=None):
+                 plans=None, invoices=None, items=None):
         self.id = id
         self.gateway_token = gateway_token
         self.cc_first_name = cc_first_name
@@ -257,7 +257,9 @@ class Subscription(object):
         self.cc_expiration_date = cc_expiration_date
         self.canceled = canceled_datetime
         self.created = created_datetime
+        self.items = items
         
+        self.plan = PricingPlan(**plans[0])
         
         super(Subscription, self).__init__()
     
