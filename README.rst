@@ -19,5 +19,6 @@ Sharpy offers a number of advantages:
 * Will have complete documentation soon.
 * Supports most of the Cheddar and will the full Cheddar Getter API soon.
 
-**Get the code for sharpy, read the docs, and submit issues at our Github page:  `https://github.com/saaspire/sharpy <https://github.com/saaspire/sharpy>`_**
+**Get the code for sharpy, read the docs, and submit issues at our Github page:**
+https://github.com/saaspire/sharpy
 
