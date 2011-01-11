@@ -216,3 +216,19 @@ class ProductTests(unittest.TestCase):
         
         self.assertEquals(expected, result)
         
+    @clear_users
+    def test_get_customers(self):
+        customer1 = self.get_customer()
+        customer2_data = copy(self.paid_defaults)
+        customer2_data.update({
+            'code': 'test2',
+            'email':'garbage+2@saaspire.com',
+            'first_name': 'Test2',
+            'last_name': 'User2',
+        })
+        customer2 = self.get_customer(**customer2_data)
+        product = self.get_product()
+        
+        fetched_customers = product.get_customers()
+        
+        self.assertEquals(2, len(fetched_customers))

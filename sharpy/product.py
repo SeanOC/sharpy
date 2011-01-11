@@ -157,7 +157,16 @@ class CheddarProduct(object):
         return customer
         
     def get_customers(self):
+        customers = []
+        
         response = self.client.make_request(path='customers/get')
+        cusotmer_parser = CustomersParser()
+        customers_data = cusotmer_parser.parse_xml(response.content)
+        for customer_data in customers_data:
+            customers.append(Customer(product=self, **customer_data))
+            
+        return customers
+        
         
 class PricingPlan(object):
     
