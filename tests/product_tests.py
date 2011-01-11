@@ -397,3 +397,63 @@ class ProductTests(unittest.TestCase):
     @clear_users
     def test_decimal_set(self):
         self.assert_set(Decimal('1.234'))
+        
+    def assert_charged(self, code, each_amount, quantity=None,
+                        description=None):
+        customer = self.get_customer(**self.paid_defaults)
+        product = self.get_product()
+    
+        customer.charge(
+            code=code,
+            each_amount=each_amount,
+            quantity=quantity,
+            description=description,
+        )
+        
+        if description is None:
+            description = ''
+        
+        found_charge = None
+        for invoice in customer.subscription.invoices:
+            for charge in invoice['charges']:
+                if charge['code'] == code:
+                    found_charge = charge
+        
+        self.assertAlmostEqual(Decimal(each_amount), found_charge['each_amount'], places=2)
+        self.assertEqual(quantity, found_charge['quantity'])
+        self.assertEqual(description, found_charge['description'])
+        
+        fetched_customer = product.get_customer(code=customer.code)
+        fetched_charge = None
+        for invoice in fetched_customer.subscription.invoices:
+            for charge in invoice['charges']:
+                if charge['code'] == code:
+                    fetched_charge = charge
+        
+        self.assertAlmostEqual(Decimal(each_amount), fetched_charge['each_amount'], places=2)
+        self.assertEqual(quantity, fetched_charge['quantity'])
+        self.assertEqual(description, fetched_charge['description'])
+    
+    @clear_users
+    def test_add_charge(self):
+        self.assert_charged(code='TEST-CHARGE', each_amount=1, quantity=1)
+        
+    @clear_users
+    def test_add_float_charge(self):
+        self.assert_charged(code='TEST-CHARGE', each_amount=2.3, quantity=2)
+        
+    @clear_users
+    def test_add_float_charge(self):
+        self.assert_charged(code='TEST-CHARGE', each_amount=2.3, quantity=2)
+        
+    @clear_users
+    def test_add_decimal_charge(self):
+        self.assert_charged(code='TEST-CHARGE', each_amount=Decimal('2.3'), quantity=3)
+        
+    @clear_users
+    def test_add_charge_with_descriptions(self):
+        self.assert_charged(code='TEST-CHARGE', each_amount=1, quantity=1, description="A test charge")
+        
+    @clear_users
+    def test_add_credit(self):
+        self.assert_charged(code='TEST-CHARGE', each_amount=-1, quantity=1)

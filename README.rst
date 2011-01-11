@@ -16,8 +16,8 @@ Sharpy offers a number of advantages:
 * Both a high and low level API - Work with cheddar the way you want to.
 * 100% test coverage.
 * Proper packaging - Sharpy can be installed via easy_install and PIP.
+* Implements the full Cheddar Getter API.
 * Will have complete documentation soon.
-* Supports most of the Cheddar and will the full Cheddar Getter API soon.
 
 That all being said, sharpy is still very new and is likely to undergo some 
 significant API changes in the near future.  The code should be fairly safe 
