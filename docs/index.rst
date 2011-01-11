@@ -11,6 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
+   high_level_api
    development
 
 Indices and tables
