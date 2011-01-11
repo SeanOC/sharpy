@@ -3,8 +3,9 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 import unittest
 
-from testconfig import config
+from dateutil.tz import *
 from nose.tools import raises
+from testconfig import config
 
 from sharpy.product import CheddarProduct
 from sharpy.exceptions import NotFound
@@ -285,3 +286,16 @@ class ProductTests(unittest.TestCase):
         
         fetched_customers = product.get_customers()
         self.assertEquals(0, len(fetched_customers))
+        
+    @clear_users
+    def test_cancel_subscription(self):
+        customer = self.get_customer()
+        customer.subscription.cancel()
+        
+        now = datetime.now(tzutc())
+        canceled_on = customer.subscription.canceled
+        diff = now - canceled_on
+        limit = timedelta(seconds=10)
+        
+        self.assertLess(diff, limit)
+        

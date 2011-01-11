@@ -450,6 +450,21 @@ class Subscription(object):
     def __repr__(self):
         return u'Subscription: %s' % self.id
         
+    def cancel(self):
+        client = self.customer.product.client
+        response = client.make_request(
+            path='customers/cancel',
+            params={'code': self.customer.code},
+        )
+        
+        cusotmer_parser = CustomersParser()
+        customers_data = cusotmer_parser.parse_xml(response.content)
+        customer_data = customers_data[0]
+        self.customer.load_data(
+            product=self.customer.product,
+            **customer_data
+        )
+        
 class Item(object):
     
     def __init__(self, code, subscription, id=None, name=None, \
