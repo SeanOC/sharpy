@@ -153,7 +153,7 @@ class CheddarProduct(object):
                 data[full_key] = value
 
         if initial_bill_date:
-            data['subscription[initialBillDate]'] = self.client.format_datetime(initial_bill_date)
+            data['subscription[initialBillDate]'] = self.client.format_date(initial_bill_date)
 
         if cc_number:
             data['subscription[ccNumber]'] = cc_number

@@ -6,7 +6,7 @@ from nose.tools import raises, assert_raises
 from testconfig import config
 
 from sharpy.client import Client
-from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure, NaughtyGateway, UnprocessableEntity
+from sharpy.exceptions import AccessDenied, BadRequest, NotFound, CheddarFailure, NaughtyGateway, UnprocessableEntity, PreconditionFailed
 
 from testing_tools.decorators import clear_users
 
@@ -115,7 +115,7 @@ class ClientTests(unittest.TestCase):
         client.make_request(path, data=data)
     
 
-    def generate_error_response(self, auxcode):
+    def generate_error_response(self, auxcode, **overrides):
         '''
         Creates a request to cheddar which should return an error
         with the provided aux code.  See the urls below for details
@@ -139,6 +139,7 @@ class ClientTests(unittest.TestCase):
             'subscription[ccLastName]': 'test',
             'subscription[ccZip]': '0%d' % auxcode,
         }
+        data.update(overrides)
         
         client = self.get_client()
         client.make_request(path, data=data)
@@ -153,12 +154,14 @@ class ClientTests(unittest.TestCase):
     def assertCheddarErrorForAuxCodes(self, auxcodes, expected_exception):
         for auxcode in auxcodes:
             self.assertCheddarError(auxcode, expected_exception)
-    
+            
+    @clear_users
     def test_cheddar_500s(self):
         auxcodes = (1000, 1002, 1003)
         expected_exception = CheddarFailure
         self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
         
+    @clear_users
     def test_cheddar_400(self):
         '''
         The cheddar docs at
@@ -168,18 +171,26 @@ class ClientTests(unittest.TestCase):
         docs but for now we're assuming the API is correct.
         '''
         self.assertCheddarError(auxcode=1001, expected_exception=BadRequest)
-            
+    
+    @clear_users
     def test_cheddar_401s(self):
         auxcodes = (2000, 2001, 2002, 2003)
         expected_exception = AccessDenied
         self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
             
+    @clear_users
     def test_cheddar_502s(self):
         auxcodes = (3000, 4000)
         expected_exception = NaughtyGateway
         self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
-        
+    
+    @clear_users
     def test_cheddar_422s(self):
         auxcodes = (5000, 5001, 5002, 5003, 6000, 6001, 6002, 7000)
         expected_exception = UnprocessableEntity
         self.assertCheddarErrorForAuxCodes(auxcodes, expected_exception)
+        
+    @clear_users
+    @raises(PreconditionFailed)
+    def test_cheddar_412s(self):
+        self.generate_error_response(auxcode=2345, firstName='')

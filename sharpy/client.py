@@ -52,6 +52,13 @@ class Client(object):
         str_dt = utc_value.strftime('%Y-%m-%dT%H:%M:%S+00:00')
         return str_dt
         
+    def format_date(self, to_format):
+        if to_format.tzinfo is not None:
+            utc_value = to_format.astimezone(tzutc())
+        else:
+            utc_value = to_format
+        str_dt = utc_value.strftime('%Y-%m-%d')
+        return str_dt
     
     def make_request(self, path, params=None, data=None, method=None):
         '''
@@ -76,7 +83,7 @@ class Client(object):
 
         client_log.debug('Request Method:  %s' % method)
         client_log.debug('Request Body(Data):  %s' % data)
-        client_log.debug('Request Body(Raw):  %s' % data)
+        client_log.debug('Request Body(Raw):  %s' % body)
             
         # Setup http client
         h = httplib2.Http(cache=self.cache, timeout=self.timeout)

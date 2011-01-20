@@ -159,7 +159,11 @@ class ProductTests(unittest.TestCase):
     @clear_users
     def test_create_customer_with_initial_bill_date(self):
         initial_bill_date = datetime.now() + timedelta(days=30)
-        self.get_customer(initial_bill_date=initial_bill_date)
+        customer = self.get_customer(initial_bill_date=initial_bill_date)
+        invoice = customer.subscription.invoices[0]
+        real_bill_date = invoice['billing_datetime']
+        
+        self.assertEquals(initial_bill_date.date(), real_bill_date.date())
         
     @clear_users
     def test_create_paid_customer(self):
