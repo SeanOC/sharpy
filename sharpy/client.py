@@ -1,9 +1,12 @@
+import logging
 from urllib import urlencode
 
 from dateutil.tz import tzutc
 import httplib2
 
 from sharpy.exceptions import CheddarError, AccessDenied, BadRequest, NotFound, PreconditionFailed, CheddarFailure, NaughtyGateway, UnprocessableEntity
+
+client_log = logging.getLogger('SharpyClient')
 
 class Client(object):
     default_endpoint = 'https://cheddargetter.com/xml'
@@ -57,6 +60,7 @@ class Client(object):
         '''
         # Setup values
         url = self.build_url(path, params)
+        client_log.debug('Requesting:  %s' % url)
         
         if data:
             method = 'POST'
@@ -76,6 +80,8 @@ class Client(object):
         # Make request
         response, content = h.request(url, method, body=body, headers=headers)
         status = response.status
+        client_log.debug('Response Status:  %d' % status)
+        client_log.debug('Response Content:  %s' % content)
         if status != 200 and status != 302:
             exception_class = CheddarError
             if status == 401:
