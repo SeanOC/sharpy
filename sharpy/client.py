@@ -61,7 +61,6 @@ class Client(object):
         # Setup values
         url = self.build_url(path, params)
         client_log.debug('Requesting:  %s' % url)
-        
         if data:
             method = 'POST'
             body = urlencode(data)
@@ -72,6 +71,11 @@ class Client(object):
             method = method or 'GET'
             body = None
             headers = None
+            
+            
+
+        client_log.debug('Request Method:  %s' % method)
+        client_log.debug('Request Body:  %s' % body)
             
         # Setup http client
         h = httplib2.Http(cache=self.cache, timeout=self.timeout)
