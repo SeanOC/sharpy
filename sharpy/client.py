@@ -75,7 +75,8 @@ class Client(object):
             
 
         client_log.debug('Request Method:  %s' % method)
-        client_log.debug('Request Body:  %s' % body)
+        client_log.debug('Request Body(Data):  %s' % data)
+        client_log.debug('Request Body(Raw):  %s' % data)
             
         # Setup http client
         h = httplib2.Http(cache=self.cache, timeout=self.timeout)
