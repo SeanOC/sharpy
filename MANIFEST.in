@@ -1,2 +1,6 @@
 include *.rst
+include *.txt
 recursive-include docs *.rst
+recursive-include docs *.py
+recursive-include tests *.py
+recursive-include tests *xml
