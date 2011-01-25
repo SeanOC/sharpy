@@ -158,12 +158,15 @@ class ProductTests(unittest.TestCase):
         
     @clear_users
     def test_create_customer_with_initial_bill_date(self):
-        initial_bill_date = datetime.now() + timedelta(days=30)
+        initial_bill_date = datetime.utcnow() + timedelta(days=60)
         customer = self.get_customer(initial_bill_date=initial_bill_date)
         invoice = customer.subscription.invoices[0]
         real_bill_date = invoice['billing_datetime']
         
-        self.assertEquals(initial_bill_date.date(), real_bill_date.date())
+        # Sometimes cheddar getter will push the bill date to the next day 
+        # if the request is made around UTC midnight
+        diff = initial_bill_date.date() - real_bill_date.date()
+        self.assertLessEqual(diff.days, 1)
         
     @clear_users
     def test_create_paid_customer(self):
