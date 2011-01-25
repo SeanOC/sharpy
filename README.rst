@@ -48,7 +48,7 @@ Code
 ====
 
 You can checkout and download Sharpy's latest code at `Github
-<https://github.com/saaspire/sharpy`_.
+<https://github.com/saaspire/sharpy>`_.
 
 TODOs
 =====
