@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><plans>
+		<plan id="6b0d13f4-6bef-102e-b098-40402145ee8b" code="FREE_MONTHLY">
+		<name>Free Monthly</name>
+		<description>A free monthly plan</description>
+		<isActive>1</isActive>
+		<isFree>1</isFree>
+		<trialDays>0</trialDays>
+		<initialBillCount>1</initialBillCount>
+		<initialBillCountUnit>months</initialBillCountUnit>
+		<billingFrequency>monthly</billingFrequency>
+		<billingFrequencyPer>month</billingFrequencyPer>
+		<billingFrequencyUnit>months</billingFrequencyUnit>
+		<billingFrequencyQuantity>1</billingFrequencyQuantity>
+		<setupChargeCode></setupChargeCode>
+		<setupChargeAmount>0.00</setupChargeAmount>
+		<recurringChargeCode>FREE_MONTHLY_RECURRING</recurringChargeCode>
+		<recurringChargeAmount>0.00</recurringChargeAmount>
+		<createdDatetime>2011-01-07T20:46:43+00:00</createdDatetime>
+				<items>
+						<item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+				<name>Monthly Item</name>
+				<quantityIncluded>0</quantityIncluded>
+				<isPeriodic>0</isPeriodic>
+				<overageAmount>0.00</overageAmount>
+				<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+			</item>
+							<item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+				<name>Once Item</name>
+				<quantityIncluded>0</quantityIncluded>
+				<isPeriodic>0</isPeriodic>
+				<overageAmount>0.00</overageAmount>
+				<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+			</item>
+						</items>
+				</plan>
+	<plan id="d19974a6-6e5a-102e-b098-40402145ee8b" code="TRACKED_MONTHLY">
+		<name>Tracked Monthly</name>
+		<description></description>
+		<isActive>1</isActive>
+		<isFree>0</isFree>
+		<trialDays>0</trialDays>
+		<initialBillCount>1</initialBillCount>
+		<initialBillCountUnit>months</initialBillCountUnit>
+		<billingFrequency>monthly</billingFrequency>
+		<billingFrequencyPer>month</billingFrequencyPer>
+		<billingFrequencyUnit>months</billingFrequencyUnit>
+		<billingFrequencyQuantity>1</billingFrequencyQuantity>
+		<setupChargeCode></setupChargeCode>
+		<setupChargeAmount>0.00</setupChargeAmount>
+		<recurringChargeCode>TRACKED_MONTHLY_RECURRING</recurringChargeCode>
+		<recurringChargeAmount>10.00</recurringChargeAmount>
+		<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+				<items>
+						<item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+				<name>Monthly Item</name>
+				<quantityIncluded>2</quantityIncluded>
+				<isPeriodic>1</isPeriodic>
+				<overageAmount>10.00</overageAmount>
+				<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+			</item>
+							<item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+				<name>Once Item</name>
+				<quantityIncluded>0</quantityIncluded>
+				<isPeriodic>0</isPeriodic>
+				<overageAmount>10.00</overageAmount>
+				<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+			</item>
+						</items>
+				</plan>
+	<plan id="11af9cfc-6bf2-102e-b098-40402145ee8b" code="PAID_MONTHLY">
+		<name>Paid Monthly</name>
+		<description></description>
+		<isActive>1</isActive>
+		<isFree>0</isFree>
+		<trialDays>0</trialDays>
+		<initialBillCount>1</initialBillCount>
+		<initialBillCountUnit>months</initialBillCountUnit>
+		<billingFrequency>monthly</billingFrequency>
+		<billingFrequencyPer>month</billingFrequencyPer>
+		<billingFrequencyUnit>months</billingFrequencyUnit>
+		<billingFrequencyQuantity>1</billingFrequencyQuantity>
+		<setupChargeCode></setupChargeCode>
+		<setupChargeAmount>0.00</setupChargeAmount>
+		<recurringChargeCode>PAID_MONTHLY_RECURRING</recurringChargeCode>
+		<recurringChargeAmount>20.00</recurringChargeAmount>
+		<createdDatetime>2011-01-07T21:05:42+00:00</createdDatetime>
+				<items>
+						<item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+				<name>Monthly Item</name>
+				<quantityIncluded>0</quantityIncluded>
+				<isPeriodic>0</isPeriodic>
+				<overageAmount>0.00</overageAmount>
+				<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+			</item>
+							<item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+				<name>Once Item</name>
+				<quantityIncluded>0</quantityIncluded>
+				<isPeriodic>0</isPeriodic>
+				<overageAmount>0.00</overageAmount>
+				<createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+			</item>
+						</items>
+				</plan>
+</plans>

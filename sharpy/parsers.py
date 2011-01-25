@@ -91,6 +91,8 @@ class PlansParser(CheddarOutputParser):
         plan['is_active'] = self.parse_bool(plan_element.findtext('isActive'))
         plan['is_free'] = self.parse_bool(plan_element.findtext('isFree'))
         plan['trial_days'] = self.parse_int(plan_element.findtext('trialDays'))
+        plan['initial_bill_count'] = self.parse_int(plan_element.findtext('initialBillCount'))
+        plan['initial_bill_count_unit'] = plan_element.findtext('initialBillCountUnit')
         plan['billing_frequency'] = plan_element.findtext('billingFrequency')
         plan['billing_frequency_per'] = plan_element.findtext('billingFrequencyPer')
         plan['billing_frequency_unit'] = plan_element.findtext('billingFrequencyUnit')

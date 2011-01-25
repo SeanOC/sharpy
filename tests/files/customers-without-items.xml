@@ -42,6 +42,8 @@
             <isActive>1</isActive>
             <isFree>1</isFree>
             <trialDays>0</trialDays>
+            <initialBillCount>1</initialBillCount>
+            <initialBillCountUnit>months</initialBillCountUnit>
             <billingFrequency>monthly</billingFrequency>
             <billingFrequencyPer>month</billingFrequencyPer>
             <billingFrequencyUnit>months</billingFrequencyUnit>
