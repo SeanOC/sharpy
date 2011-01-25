@@ -101,4 +101,26 @@ A few things to notice here:
       `Decimal <http://docs.python.org/library/decimal.html>`_.
     * Negative values for ``each_amount`` are credits to the customer's
       account, positive values are charges.
-    
+      
+
+========
+Fetching
+========
+
+Get an individual customer
+==========================
+
+To fetch the information for an individual customer, simply call 
+:py:func:`CheddarProduct.get_customer` with your customer's code. The
+customer's code is the unique identifier you provided in your customer
+creation call.
+
+.. literalinclude:: examples/customer_fetch/get_customer.py
+
+If a customer with the given code cannot be found, a 
+:py:class:`sharpy.exceptions.NotFound` exception will be raised.
+
+Get all customers
+=================
+
+.. literalinclude:: examples/customer_fetch/all_customers.py
