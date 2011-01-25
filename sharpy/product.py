@@ -1,5 +1,8 @@
 from copy import copy
+from datetime import date
 from decimal import Decimal, getcontext as get_decimal_context
+
+from dateutil.relativedelta import relativedelta
 
 from sharpy.client import Client
 from sharpy.exceptions import NotFound
@@ -238,7 +241,8 @@ class CheddarProduct(object):
 class PricingPlan(object):
     
     def __init__(self, name, code, id, description, is_active, is_free,
-                 trial_days, billing_frequency, billing_frequency_per,
+                 trial_days, initial_bill_count, initial_bill_count_unit, 
+                 billing_frequency, billing_frequency_per,
                  billing_frequency_quantity, billing_frequency_unit,
                  setup_charge_code, setup_charge_amount,
                  recurring_charge_code, recurring_charge_amount,
@@ -247,6 +251,8 @@ class PricingPlan(object):
         self.load_data(name=name, code=code, id=id, description=description,
                         is_active=is_active, is_free=is_free,
                         trial_days=trial_days,
+                        initial_bill_count=initial_bill_count,
+                        initial_bill_count_unit=initial_bill_count_unit,
                         billing_frequency=billing_frequency,
                         billing_frequency_per=billing_frequency_per,
                         billing_frequency_quantity=billing_frequency_quantity,
@@ -261,7 +267,8 @@ class PricingPlan(object):
         super(PricingPlan, self).__init__()
         
     def load_data(self, name, code, id, description, is_active, is_free,
-                 trial_days, billing_frequency, billing_frequency_per,
+                 trial_days, initial_bill_count, initial_bill_count_unit, 
+                 billing_frequency, billing_frequency_per,
                  billing_frequency_quantity, billing_frequency_unit,
                  setup_charge_code, setup_charge_amount,
                  recurring_charge_code, recurring_charge_amount,
@@ -274,6 +281,8 @@ class PricingPlan(object):
         self.is_active = is_active
         self.is_free = is_free
         self.trial_days = trial_days
+        self.initial_bill_count = initial_bill_count
+        self.initial_bill_count_unit = initial_bill_count_unit
         self.billing_frequency = billing_frequency
         self.billing_frequency_per = billing_frequency_per
         self.billing_frequency_quantity = billing_frequency_quantity
@@ -290,6 +299,25 @@ class PricingPlan(object):
         
     def __repr__(self):
         return u'PricingPlan: %s (%s)' % (self.name, self.code)
+        
+    @property
+    def initial_bill_date(self):
+        '''
+        An estimated initial bill date for an account created today,
+        based on available plan info.
+        '''
+        time_to_start = None
+        
+        if self.initial_bill_count_unit == 'months':
+            time_to_start = relativedelta(months=self.initial_bill_count)
+        else:
+            time_to_start = relativedelta(days=self.initial_bill_count)
+        
+        initial_bill_date = date.today() + time_to_start
+        
+        return initial_bill_date
+        
+        
 
 class Customer(object):
     

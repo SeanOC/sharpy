@@ -1,8 +1,9 @@
 from copy import copy
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 import unittest
 
+from dateutil.relativedelta import relativedelta
 from dateutil.tz import *
 from nose.tools import raises
 from testconfig import config
@@ -79,6 +80,16 @@ class ProductTests(unittest.TestCase):
         plan = product.get_plan(code)
         
         self.assertEquals(code, plan.code)
+        
+    def test_plan_initial_bill_date(self):
+        product = self.get_product()
+        code = 'PAID_MONTHLY'
+        plan = product.get_plan(code)
+        
+        expected = date.today() + relativedelta(months=1)
+        result = plan.initial_bill_date
+        
+        self.assertEquals(expected, result)
         
     def get_customer(self, **kwargs):
         customer_data = copy(self.customer_defaults)
