@@ -45,7 +45,7 @@ class Client(object):
         return url
         
     def format_datetime(self, to_format):
-        if to_format.tzinfo is not None:
+        if getattr(to_format, 'tzinfo', None) is not None:
             utc_value = to_format.astimezone(tzutc())
         else:
             utc_value = to_format
@@ -53,7 +53,7 @@ class Client(object):
         return str_dt
         
     def format_date(self, to_format):
-        if to_format.tzinfo is not None:
+        if getattr(to_format, 'tzinfo', None) is not None:
             utc_value = to_format.astimezone(tzutc())
         else:
             utc_value = to_format

@@ -1,5 +1,5 @@
 from copy import copy
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import unittest
 
 from nose.tools import raises, assert_raises
@@ -194,3 +194,32 @@ class ClientTests(unittest.TestCase):
     @raises(PreconditionFailed)
     def test_cheddar_412s(self):
         self.generate_error_response(auxcode=2345, firstName='')
+    
+    def test_format_datetime_with_datetime(self):
+        client = self.get_client()
+        result = client.format_datetime(datetime(year=2010,month=9,day=19,hour=20,minute=10,second=39))
+        expected = '2010-09-19T20:10:39+00:00'
+
+        self.assertEquals(expected, result)
+
+    def test_format_datetime_with_date(self):
+        client = self.get_client()
+        result = client.format_datetime(date(year=2010,month=9,day=19))
+        expected = '2010-09-19T00:00:00+00:00'
+
+        self.assertEquals(expected, result)
+    
+    def test_format_date_with_datetime(self):
+        client = self.get_client()
+        result = client.format_date(datetime(year=2010,month=9,day=19,hour=20,minute=10,second=39))
+        expected = '2010-09-19'
+
+        self.assertEquals(expected, result)
+
+    def test_format_date_with_date(self):
+        client = self.get_client()
+        result = client.format_date(date(year=2010,month=9,day=19))
+        expected = '2010-09-19'
+
+        self.assertEquals(expected, result)
+
