@@ -428,7 +428,8 @@ class Customer(object):
                         cc_first_name=cc_first_name,
                         cc_last_name=cc_last_name, cc_company=cc_company,
                         cc_country=cc_country, cc_address=cc_address,
-                        cc_city=cc_city, cc_state=cc_state, cc_zip=cc_zip)
+                        cc_city=cc_city, cc_state=cc_state, cc_zip=cc_zip,
+                        bill_date=bill_date,)
         
         path = 'customers/edit'
         params = {'code': self.code}
