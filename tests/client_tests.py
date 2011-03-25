@@ -209,17 +209,16 @@ class ClientTests(unittest.TestCase):
 
         self.assertEquals(expected, result)
     
-    def test_format_date_with_datetime(self):
+    def test_format_date_with_now(self):
         client = self.get_client()
-        result = client.format_date(datetime(year=2010,month=9,day=19,hour=20,minute=10,second=39))
-        expected = '2010-09-19'
+        result = client.format_date('now')
+        expected = 'now'
 
         self.assertEquals(expected, result)
 
-    def test_format_date_with_date(self):
+    def test_format_datetime_with_now(self):
         client = self.get_client()
-        result = client.format_date(date(year=2010,month=9,day=19))
-        expected = '2010-09-19'
+        result = client.format_datetime('now')
+        expected = 'now'
 
         self.assertEquals(expected, result)
-

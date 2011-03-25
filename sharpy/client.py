@@ -45,19 +45,25 @@ class Client(object):
         return url
         
     def format_datetime(self, to_format):
-        if getattr(to_format, 'tzinfo', None) is not None:
-            utc_value = to_format.astimezone(tzutc())
+        if to_format == 'now':
+            str_dt = to_format
         else:
-            utc_value = to_format
-        str_dt = utc_value.strftime('%Y-%m-%dT%H:%M:%S+00:00')
+            if getattr(to_format, 'tzinfo', None) is not None:
+                utc_value = to_format.astimezone(tzutc())
+            else:
+                utc_value = to_format
+            str_dt = utc_value.strftime('%Y-%m-%dT%H:%M:%S+00:00')
         return str_dt
         
     def format_date(self, to_format):
-        if getattr(to_format, 'tzinfo', None) is not None:
-            utc_value = to_format.astimezone(tzutc())
+        if to_format == 'now':
+            str_dt = to_format
         else:
-            utc_value = to_format
-        str_dt = utc_value.strftime('%Y-%m-%d')
+            if getattr(to_format, 'tzinfo', None) is not None:
+                utc_value = to_format.astimezone(tzutc())
+            else:
+                utc_value = to_format
+            str_dt = utc_value.strftime('%Y-%m-%d')
         return str_dt
     
     def make_request(self, path, params=None, data=None, method=None):
