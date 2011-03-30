@@ -51,6 +51,13 @@ class ProductTests(unittest.TestCase):
         
         return product
 
+    def test_repr(self):
+        product = self.get_product()
+        expected = u'CheddarProduct: %s' % product.product_code
+        result = product.__repr__()
+
+        self.assertEquals(expected, result)
+
     def test_instantiate_product(self):
         product = self.get_product()
         

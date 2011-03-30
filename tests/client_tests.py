@@ -2,6 +2,8 @@ from copy import copy
 from datetime import date, timedelta, datetime
 import unittest
 
+from dateutil.tz import tzoffset
+
 from nose.tools import raises, assert_raises
 from testconfig import config
 
@@ -207,6 +209,13 @@ class ClientTests(unittest.TestCase):
         client = self.get_client()
         result = client.format_datetime(datetime(year=2010,month=9,day=19,hour=20,minute=10,second=39))
         expected = '2010-09-19T20:10:39+00:00'
+
+        self.assertEquals(expected, result)
+
+    def test_format_datetime_with_datetime_with_tz(self):
+        client = self.get_client()
+        result = client.format_datetime(datetime(year=2010,month=9,day=19,hour=20,minute=10,second=39, tzinfo=tzoffset("BRST", -10800)))
+        expected = '2010-09-19T23:10:39+00:00'
 
         self.assertEquals(expected, result)
 
