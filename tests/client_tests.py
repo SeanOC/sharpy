@@ -115,7 +115,7 @@ class ClientTests(unittest.TestCase):
         client.make_request(path, data=data)
     
 
-    def generate_error_response(self, auxcode, **overrides):
+    def generate_error_response(self, auxcode=None, path=None, params=None, **overrides):
         '''
         Creates a request to cheddar which should return an error
         with the provided aux code.  See the urls below for details
@@ -123,8 +123,14 @@ class ClientTests(unittest.TestCase):
         http://support.cheddargetter.com/kb/api-8/error-simulation
         http://support.cheddargetter.com/kb/api-8/error-handling
         '''
-        path = 'customers/new'
         expiration = date.today() + timedelta(days=180)
+
+        path = path or 'customers/new'
+
+        if auxcode is not None:
+            zip_code = '0%d' % auxcode
+        else:
+            zip_code = '12345'
         
         data = {
             'code': 'post_test',
@@ -137,18 +143,20 @@ class ClientTests(unittest.TestCase):
             'subscription[ccCardCode]': '123',
             'subscription[ccFirstName]': 'post',
             'subscription[ccLastName]': 'test',
-            'subscription[ccZip]': '0%d' % auxcode,
+            'subscription[ccZip]': zip_code,
         }
         data.update(overrides)
         
         client = self.get_client()
-        client.make_request(path, data=data)
+        client.make_request(path, params=params, data=data)
     
-    def assertCheddarError(self, auxcode, expected_exception):
+    def assertCheddarError(self, auxcode, expected_exception, path=None, params=None):
         assert_raises(
             expected_exception,
             self.generate_error_response,
             auxcode=auxcode,
+            path=path,
+            params=params,
         )
         
     def assertCheddarErrorForAuxCodes(self, auxcodes, expected_exception):
@@ -222,3 +230,18 @@ class ClientTests(unittest.TestCase):
         expected = 'now'
 
         self.assertEquals(expected, result)
+
+    @clear_users
+    def test_chedder_update_customer_error(self):
+        # Overriding the zipcode so a customer actually gets created
+        overrides = {
+            'subscription[ccZip]': 12345
+        }
+        self.generate_error_response(**overrides)
+
+        self.assertCheddarError(
+            auxcode=6000,
+            expected_exception=UnprocessableEntity,
+            path='customers/edit',
+            params={'code': 'post_test'}
+        )

@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from decimal import Decimal, InvalidOperation
+import logging
 
 from dateutil import parser as date_parser
 
@@ -10,9 +11,18 @@ except ImportError:
     
 from sharpy.exceptions import ParseError
 
+client_log = logging.getLogger('SharpyClient')
+
 def parse_error(xml_str):
     error = {}
-    elem = XML(xml_str)
+    doc = XML(xml_str)
+    if doc.tag == 'error':
+        elem = doc
+    elif doc.tag == 'customers':
+        elem = doc.find('.//error')
+    else:
+        raise Exception("Can't find error element in '%s'" % xml_str)
+    client_log.debug(elem)
     error['id'] = elem.attrib['id']
     error['code'] = elem.attrib['code']
     error['aux_code'] = elem.attrib['auxCode']
