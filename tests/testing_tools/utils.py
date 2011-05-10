@@ -5,11 +5,12 @@ def clear_users():
     username = config['cheddar']['username']
     password = config['cheddar']['password']
     product = config['cheddar']['product_code']
-    
+    endpoint = config['cheddar']['endpoint']
+
     h = httplib2.Http()
     h.add_credentials(username, password)
     
-    url = 'https://cheddargetter.com/xml/customers/delete-all/confirm/1/productCode/%s' % product
+    url = '%s/customers/delete-all/confirm/1/productCode/%s' % (endpoint, product)
     
     response, content = h.request(url, 'POST')
     
