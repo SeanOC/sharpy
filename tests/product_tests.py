@@ -482,3 +482,82 @@ class ProductTests(unittest.TestCase):
     @clear_users
     def test_add_credit(self):
         self.assert_charged(code='TEST-CHARGE', each_amount=-1, quantity=1)
+
+    def assertCharge(self, customer, code, each_amount, quantity, description='', invoice_type=None):
+        found_charge = None
+        for invoice in customer.subscription.invoices:
+            if invoice_type is None or invoice['type'] == invoice_type:
+                for charge in invoice['charges']:
+                    if charge['code'] == code:
+                        found_charge = charge
+        
+        self.assertAlmostEqual(Decimal(each_amount), found_charge['each_amount'], places=2)
+        self.assertEqual(quantity, found_charge['quantity'])
+        self.assertEqual(description, found_charge['description'])
+
+
+    def assertOneTimeInvoice(self, charges):
+        customer = self.get_customer(**self.paid_defaults)
+        product = self.get_product()
+
+        customer.create_one_time_invoice(charges)
+
+        for charge in charges:
+            self.assertCharge(
+                customer,
+                code = charge['code'],
+                quantity = charge['quantity'],
+                each_amount = charge['each_amount'],
+                description = charge.get('description', ''),
+                invoice_type = 'one-time',
+            )
+
+        fetched_customer = product.get_customer(code=customer.code)
+        for charge in charges:
+            self.assertCharge(
+                fetched_customer,
+                code = charge['code'],
+                quantity = charge['quantity'],
+                each_amount = charge['each_amount'],
+                description = charge.get('description', ''),
+                invoice_type = 'one-time',
+            )
+
+    @clear_users
+    def test_add_simple_one_time_invoice(self):
+        charges = [{
+            'code': 'immediate-test',
+            'quantity': 1,
+            'each_amount': Decimal(5.23)
+        },]
+
+        self.assertOneTimeInvoice(charges)
+
+    @clear_users
+    def test_add_one_time_invoice_with_description(self):
+        charges = [{
+            'code': 'immediate-test',
+            'quantity': 1,
+            'each_amount': Decimal(5.23),
+            'description': 'This is a test charge'
+        },]
+
+        self.assertOneTimeInvoice(charges)
+
+
+    @clear_users
+    def test_add_one_time_invoice_with_multiple_charges(self):
+        charges = [{
+            'code': 'immediate-test',
+            'quantity': 1,
+            'each_amount': Decimal(5.23),
+            'description': 'This is a test charge'
+        },
+        {
+            'code': 'immediate-test-2',
+            'quantity': 3,
+            'each_amount': 15,
+            'description': 'This is another test charge'
+        },]
+
+        self.assertOneTimeInvoice(charges)
