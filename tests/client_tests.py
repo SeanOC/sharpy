@@ -17,6 +17,7 @@ class ClientTests(unittest.TestCase):
         'username': config['cheddar']['username'],
         'password': config['cheddar']['password'],
         'product_code': config['cheddar']['product_code'],
+        'endpoint': config['cheddar']['endpoint'],
     }
     
     def get_client(self, **kwargs):
@@ -50,7 +51,7 @@ class ClientTests(unittest.TestCase):
     def try_url_build(self, path, params=None):
         c = self.get_client()
         expected = u'%s/%s/productCode/%s' % (
-            c.default_endpoint,
+            c.endpoint,
             path,
             c.product_code,
         )

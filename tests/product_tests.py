@@ -19,6 +19,7 @@ class ProductTests(unittest.TestCase):
         'username': config['cheddar']['username'],
         'password': config['cheddar']['password'],
         'product_code': config['cheddar']['product_code'],
+        'endpoint': config['cheddar']['endpoint'],
     }
     
     customer_defaults = {
@@ -329,7 +330,7 @@ class ProductTests(unittest.TestCase):
         canceled_on = customer.subscription.canceled
         diff = now - canceled_on
         limit = timedelta(seconds=10)
-        
+
         self.assertLess(diff, limit)
         
     def assert_increment(self, quantity=None):
