@@ -255,9 +255,9 @@ class CustomersParser(CheddarOutputParser):
         
     def parse_invoices(self, invoices_element):
         invoices = []
-        
-        for invoice_element in invoices_element:
-            invoices.append(self.parse_invoice(invoice_element))
+        if invoices_element:
+            for invoice_element in invoices_element:
+                invoices.append(self.parse_invoice(invoice_element))
             
         return invoices
     
