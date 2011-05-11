@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='Sharpy',
-    version='0.6.8',
+    version='0.6.9',
     description='Python client for the Cheddar Getter API (http://cheddargetter.com).',
     author="Sean O'Connor",
     author_email="sean@saaspire.com",
