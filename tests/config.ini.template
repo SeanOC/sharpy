@@ -2,3 +2,4 @@
 username = your-address@email.com
 password = PASSWORD
 product_code = PRODUCT
+endpoint = https://cheddargetter.com/xml
