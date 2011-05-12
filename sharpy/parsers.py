@@ -255,7 +255,7 @@ class CustomersParser(CheddarOutputParser):
         
     def parse_invoices(self, invoices_element):
         invoices = []
-        if invoices_element:
+        if invoices_element is not None:
             for invoice_element in invoices_element:
                 invoices.append(self.parse_invoice(invoice_element))
             
