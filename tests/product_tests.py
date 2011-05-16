@@ -29,6 +29,20 @@ class ProductTests(unittest.TestCase):
         'last_name': 'User',
         'plan_code': 'FREE_MONTHLY',
     }
+
+    paypal_defaults  = {
+        'code': 'test',
+        'email':'garbage@saaspire.com',
+        'first_name': 'Test',
+        'last_name': 'User',
+        'plan_code': 'PAID_MONTHLY',
+        'method': 'paypal',
+        'cc_first_name': 'Test',
+        'cc_last_name': 'User',
+        'cc_email': 'garbage@saaspire.com',
+        'return_url': 'http://example.com/return',
+        'cancel_url': 'http://example.com/cancel',
+    }
     
     exipration = datetime.now() + timedelta(days=180)
     
@@ -210,6 +224,12 @@ class ProductTests(unittest.TestCase):
         data['items'] = items
         data['plan_code'] = 'TRACKED_MONTHLY'
         self.get_customer(**data)
+
+    @clear_users
+    def test_create_paypal_customer(self):
+        data = copy(self.paypal_defaults)
+        self.get_customer(**data)
+
         
     @clear_users
     def test_customer_repr(self):

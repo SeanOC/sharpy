@@ -228,10 +228,21 @@ class CustomersParser(CheddarOutputParser):
         subscription['cc_state'] = subscription_element.findtext('ccState')
         subscription['cc_zip'] = subscription_element.findtext('ccZip')
         subscription['cc_type'] = subscription_element.findtext('ccType')
+        subscription['cc_email'] = subscription_element.findtext('ccEmail')
         subscription['cc_last_four'] = subscription_element.findtext('ccLastFour')
         subscription['cc_expiration_date'] = subscription_element.findtext('ccExpirationDate')
+        subscription['cancel_type'] = subscription_element.findtext('cancelType')
+        subscription['cancel_reason'] = subscription_element.findtext('cancelReason')
         subscription['canceled_datetime'] = self.parse_datetime(subscription_element.findtext('canceledDatetime'))
         subscription['created_datetime'] = self.parse_datetime(subscription_element.findtext('createdDatetime'))
+        gateway_account_element = subscription_element.find('gatewayAccount')
+        if gateway_account_element is not None:
+            subscription['gateway_account'] = {
+                'id': gateway_account_element.findtext('id'),
+                'gateway': gateway_account_element.findtext('gateway'),
+                'type': gateway_account_element.findtext('type')
+            }
+        subscription['redirect_url'] = subscription_element.findtext('redirectUrl')
         
         # Plans
         subscription['plans'] = self.parse_plans(subscription_element.find('plans'))

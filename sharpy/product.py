@@ -51,21 +51,24 @@ class CheddarProduct(object):
                         referer=None, campaign_term=None, \
                         campaign_name=None, campaign_source=None, \
                         campaign_medium=None, campaign_content=None, \
-                        meta_data=None, initial_bill_date=None, \
+                        meta_data=None, initial_bill_date=None, method=None,\
                         cc_number=None, cc_expiration=None, \
                         cc_card_code=None, cc_first_name=None, \
-                        cc_last_name=None, cc_company=None, \
+                        cc_last_name=None, cc_email=None, cc_company=None, \
                         cc_country=None, cc_address=None, cc_city=None, \
-                        cc_state=None, cc_zip=None, charges=None, items=None):
+                        cc_state=None, cc_zip=None, return_url=None, \
+                        cancel_url=None, charges=None, items=None):
+
+        print cc_last_name
                         
         data = self.build_customer_post_data(code, first_name, last_name, \
                     email, plan_code, company, is_vat_excempt, vat_number, \
                     notes, first_contact_datetime, referer, campaign_term, \
                     campaign_name, campaign_source, campaign_medium, \
-                    campaign_content, meta_data, initial_bill_date, \
+                    campaign_content, meta_data, initial_bill_date, method, \
                     cc_number, cc_expiration, cc_card_code, cc_first_name, \
-                    cc_last_name, cc_company, cc_country, cc_address, \
-                    cc_city, cc_state, cc_zip)
+                    cc_last_name, cc_email, cc_company, cc_country, cc_address, \
+                    cc_city, cc_state, cc_zip, return_url, cancel_url)
         
         if charges:
             for i, charge in enumerate(charges):
@@ -93,13 +96,15 @@ class CheddarProduct(object):
                 referer=None, campaign_term=None, \
                 campaign_name=None, campaign_source=None, \
                 campaign_medium=None, campaign_content=None, \
-                meta_data=None, initial_bill_date=None, \
+                meta_data=None, initial_bill_date=None, method=None,\
                 cc_number=None, cc_expiration=None, \
                 cc_card_code=None, cc_first_name=None, \
-                cc_last_name=None, cc_company=None, \
+                cc_last_name=None, cc_email=None, cc_company=None, \
                 cc_country=None, cc_address=None, cc_city=None, \
-                cc_state=None, cc_zip=None, bill_date=None):
+                cc_state=None, cc_zip=None, return_url=None, cancel_url=None, \
+                bill_date=None):
         
+        print "Last Name:  %s" % cc_last_name
         data = {}
         
         if code:
@@ -157,6 +162,9 @@ class CheddarProduct(object):
 
         if initial_bill_date:
             data['subscription[initialBillDate]'] = self.client.format_date(initial_bill_date)
+        
+        if method:
+            data['subscription[method]'] = method
 
         if cc_number:
             data['subscription[ccNumber]'] = cc_number
@@ -172,6 +180,9 @@ class CheddarProduct(object):
 
         if cc_last_name:
             data['subscription[ccLastName]'] = cc_last_name
+
+        if cc_email:
+            data['subscription[ccEmail]'] = cc_email
 
         if cc_company:
             data['subscription[ccCompany]'] = cc_company
@@ -190,7 +201,12 @@ class CheddarProduct(object):
 
         if cc_zip:
             data['subscription[ccZip]'] = cc_zip
-            
+
+        if return_url:
+            data['subscription[returnUrl]'] = return_url
+        
+        if cancel_url:
+            data['subscription[cancelUrl]'] = cancel_url
         
         if bill_date:
             data['subscription[changeBillDate]'] = self.client.format_datetime(bill_date)
@@ -406,7 +422,7 @@ class Customer(object):
                 referer=None, campaign_term=None, \
                 campaign_name=None, campaign_source=None, \
                 campaign_medium=None, campaign_content=None, \
-                meta_data=None,
+                meta_data=None, method=None, \
                 cc_number=None, cc_expiration=None, \
                 cc_card_code=None, cc_first_name=None, \
                 cc_last_name=None, cc_company=None, \
@@ -422,7 +438,7 @@ class Customer(object):
                         campaign_source=campaign_source,
                         campaign_medium=campaign_medium,
                         campaign_content=campaign_content,
-                        meta_data=meta_data,
+                        meta_data=meta_data, method=method,
                         cc_number=cc_number, cc_expiration=cc_expiration,
                         cc_card_code=cc_card_code,
                         cc_first_name=cc_first_name,
@@ -525,7 +541,9 @@ class Subscription(object):
                  cc_company, cc_country, cc_address, cc_city, cc_state,
                  cc_zip, cc_type, cc_last_four, cc_expiration_date, customer,
                  canceled_datetime=None ,created_datetime=None,
-                 plans=None, invoices=None, items=None):
+                 plans=None, invoices=None, items=None, gateway_account=None,
+                 cancel_reason=None, cancel_type=None, cc_email=None,
+                 redirect_url=None):
         
         self.load_data(id=id, gateway_token=gateway_token, 
                         cc_first_name=cc_first_name,
@@ -534,19 +552,23 @@ class Subscription(object):
                         cc_address=cc_address, cc_city=cc_city,
                         cc_state=cc_state, cc_zip=cc_zip, cc_type=cc_type,
                         cc_last_four=cc_last_four,
-                        cc_expiration_date=cc_expiration_date,
+                        cc_expiration_date=cc_expiration_date, cc_email=cc_email,
                         customer=customer,
                         canceled_datetime=canceled_datetime, 
                         created_datetime=created_datetime, plans=plans,
-                        invoices=invoices, items=items)
+                        invoices=invoices, items=items, 
+                        gateway_account=gateway_account, 
+                        cancel_reason=cancel_reason, cancel_type=cancel_type,
+                        redirect_url=None)
         
         super(Subscription, self).__init__()
         
     def load_data(self, id, gateway_token, cc_first_name, cc_last_name, \
                  cc_company, cc_country, cc_address, cc_city, cc_state, \
                  cc_zip, cc_type, cc_last_four, cc_expiration_date, customer,\
-                 canceled_datetime=None ,created_datetime=None, \
-                 plans=None, invoices=None, items=None):
+                 cc_email=None, canceled_datetime=None ,created_datetime=None, \
+                 plans=None, invoices=None, items=None, gateway_account=None, \
+                 cancel_reason=None, cancel_type=None, redirect_url=None):
                  
         self.id = id
         self.gateway_token = gateway_token
@@ -561,10 +583,15 @@ class Subscription(object):
         self.cc_type = cc_type
         self.cc_last_four = cc_last_four
         self.cc_expiration_date = cc_expiration_date
+        self.cc_email = cc_email
         self.canceled = canceled_datetime
         self.created = created_datetime
         self.invoices = invoices
         self.customer = customer
+        self.gateway_account = gateway_account
+        self.cancel_type = cancel_type
+        self.cancel_reason = cancel_reason
+        self.redirect_url = redirect_url
 
         # Organize item data into something more useful
         items_map = {}
