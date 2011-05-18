@@ -233,6 +233,17 @@ class ProductTests(unittest.TestCase):
         data['plan_code'] = 'TRACKED_MONTHLY'
         self.get_customer(**data)
 
+    
+    @clear_users
+    def test_create_paid_customer_with_decimal_quantity_items(self):
+        data = copy(self.paid_defaults)
+        items = []
+        items.append({'code': 'MONTHLY_ITEM', 'quantity': Decimal('1.23456')})
+        items.append({'code': 'ONCE_ITEM'})
+        data['items'] = items
+        data['plan_code'] = 'TRACKED_MONTHLY'
+        self.get_customer(**data)
+
     @clear_users
     def test_create_paypal_customer(self):
         data = copy(self.paypal_defaults)
