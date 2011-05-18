@@ -1,5 +1,6 @@
 from copy import copy
 from datetime import date, timedelta, datetime
+from decimal import Decimal
 import unittest
 
 from dateutil.tz import tzoffset

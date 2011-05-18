@@ -209,12 +209,20 @@ class ProductTests(unittest.TestCase):
     def test_create_paid_customer_with_charges(self):
         data = copy(self.paid_defaults)
         charges = []
-        charges.append({'code': 'test_charge_1', 'each_amount': Decimal('2.30')})
-        charges.append({'code': 'charge2', 'amount': 3, 'each_amount': 4})
+        charges.append({'code': 'test_charge_1', 'each_amount':2})
+        charges.append({'code': 'charge2', 'quantity': 3, 'each_amount': 4})
         data['charges'] = charges
         self.get_customer(**data)
         
-        
+    @clear_users
+    def test_create_paid_customer_with_decimal_charges(self):
+        data = copy(self.paid_defaults)
+        charges = []
+        charges.append({'code': 'test_charge_1', 'each_amount': Decimal('2.30')})
+        charges.append({'code': 'charge2', 'each_amount': Decimal('-4.5')})
+        data['charges'] = charges
+        self.get_customer(**data)
+
     @clear_users
     def test_create_paid_customer_with_items(self):
         data = copy(self.paid_defaults)

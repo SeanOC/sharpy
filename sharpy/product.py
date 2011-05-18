@@ -74,7 +74,7 @@ class CheddarProduct(object):
             for i, charge in enumerate(charges):
                 data['charges[%d][chargeCode]' % i] = charge['code']
                 data['charges[%d][quantity]' % i] = charge.get('quantity', 1)
-                data['charges[%d][eachAmount]' % i] = charge['each_amount']
+                data['charges[%d][eachAmount]' % i] = '%.2f' % charge['each_amount']
                 data['charges[%d][description]' % i] = charge.get('description', '')
 
         if items:
@@ -478,7 +478,7 @@ class Customer(object):
         each_amount = each_amount.quantize(Decimal('.01'))
         data = {
             'chargeCode': code,
-            'eachAmount': each_amount,
+            'eachAmount': '%.2f' % each_amount,
             'quantity': quantity,
         }
         if description:
@@ -517,7 +517,7 @@ class Customer(object):
             each_amount = each_amount.quantize(Decimal('.01'))
             data['charges[%d][chargeCode]' % n ] = charge['code']
             data['charges[%d][quantity]' % n] = charge.get('quantity', 1)
-            data['charges[%d][eachAmount]' % n] = each_amount
+            data['charges[%d][eachAmount]' % n] = '%.2f' % each_amount
             if 'description' in charge.keys():
                 data['charges[%d][description]' % n] = charge['description']
 

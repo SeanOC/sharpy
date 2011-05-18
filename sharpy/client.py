@@ -1,6 +1,6 @@
 import logging
 from urllib import urlencode
-
+from decimal import getcontext
 from dateutil.tz import tzutc
 import httplib2
 
@@ -74,6 +74,7 @@ class Client(object):
         # Setup values
         url = self.build_url(path, params)
         client_log.debug('Requesting:  %s' % url)
+        
         if data:
             method = 'POST'
             body = urlencode(data)
