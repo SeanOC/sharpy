@@ -59,8 +59,6 @@ class CheddarProduct(object):
                         cc_state=None, cc_zip=None, return_url=None, \
                         cancel_url=None, charges=None, items=None):
 
-        print cc_last_name
-                        
         data = self.build_customer_post_data(code, first_name, last_name, \
                     email, plan_code, company, is_vat_excempt, vat_number, \
                     notes, first_contact_datetime, referer, campaign_term, \
@@ -103,8 +101,7 @@ class CheddarProduct(object):
                 cc_country=None, cc_address=None, cc_city=None, \
                 cc_state=None, cc_zip=None, return_url=None, cancel_url=None, \
                 bill_date=None):
-        
-        print "Last Name:  %s" % cc_last_name
+
         data = {}
         
         if code:
@@ -559,7 +556,7 @@ class Subscription(object):
                         invoices=invoices, items=items, 
                         gateway_account=gateway_account, 
                         cancel_reason=cancel_reason, cancel_type=cancel_type,
-                        redirect_url=None)
+                        redirect_url=redirect_url)
         
         super(Subscription, self).__init__()
         
