@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers>
+  <customer id="95d7696a-7fda-11e0-a51b-40403c39f8d9" code="test">
+    <firstName>Test</firstName>
+    <lastName>User</lastName>
+    <company/>
+    <email>garbage@saaspire.com</email>
+    <notes/>
+    <gatewayToken/>
+    <isVatExempt>0</isVatExempt>
+    <vatNumber/>
+    <firstContactDatetime/>
+    <referer/>
+    <refererHost/>
+    <campaignSource/>
+    <campaignMedium/>
+    <campaignTerm/>
+    <campaignContent/>
+    <campaignName/>
+    <key>3e1c70aba1</key>
+    <createdDatetime>2011-05-16T16:36:01+00:00</createdDatetime>
+    <modifiedDatetime>2011-05-16T16:36:01+00:00</modifiedDatetime>
+    <metaData/>
+    <subscriptions>
+      <subscription id="95d804ba-7fda-11e0-a51b-40403c39f8d9">
+        <plans>
+          <plan id="11af9cfc-6bf2-102e-b098-40402145ee8b" code="PAID_MONTHLY">
+            <name>Paid Monthly</name>
+            <displayName>Paid Monthly • 20.00 / Month</displayName>
+            <description/>
+            <isActive>1</isActive>
+            <isFree>0</isFree>
+            <paymentMethodIsRequired>1</paymentMethodIsRequired>
+            <trialDays>0</trialDays>
+            <initialBillCount>1</initialBillCount>
+            <initialBillCountUnit>months</initialBillCountUnit>
+            <initialInvoiceBillingDatetime>2011-06-16T12:36:02-04:00</initialInvoiceBillingDatetime>
+            <billingFrequency>monthly</billingFrequency>
+            <billingFrequencyPer>month</billingFrequencyPer>
+            <billingFrequencyUnit>months</billingFrequencyUnit>
+            <billingFrequencyQuantity>1</billingFrequencyQuantity>
+            <nextInvoiceBillingDatetime>2011-07-16T12:36:02-04:00</nextInvoiceBillingDatetime>
+            <setupChargeCode/>
+            <setupChargeAmount>0.00</setupChargeAmount>
+            <recurringChargeCode>PAID_MONTHLY_RECURRING</recurringChargeCode>
+            <recurringChargeAmount>20.00</recurringChargeAmount>
+            <onChangeInitialBillHandler>next</onChangeInitialBillHandler>
+            <setupChargeBillHandler>now</setupChargeBillHandler>
+            <onChangeSetupChargeBillHandler>no</onChangeSetupChargeBillHandler>
+            <createdDatetime>2011-01-07T21:05:42+00:00</createdDatetime>
+            <items>
+              <item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+                <name>Monthly Item</name>
+                <quantityIncluded>0</quantityIncluded>
+                <isPeriodic>0</isPeriodic>
+                <overageAmount>0.00</overageAmount>
+                <createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+              </item>
+              <item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+                <name>Once Item</name>
+                <quantityIncluded>0</quantityIncluded>
+                <isPeriodic>0</isPeriodic>
+                <overageAmount>0.00</overageAmount>
+                <createdDatetime>2011-01-10T22:40:34+00:00</createdDatetime>
+              </item>
+            </items>
+          </plan>
+        </plans>
+        <gatewayToken>SIMULATED-4dd152718371a</gatewayToken>
+        <gatewayAccount>
+          <id>303f9a50-7fda-11e0-a51b-40403c39f8d9</id>
+          <gateway>PayPal_Simulator</gateway>
+          <type>paypal</type>
+        </gatewayAccount>
+        <redirectUrl>https://cheddargetter.com/service/paypal/simulate/productId/2ccbecd6-6beb-102e-b098-40402145ee8b/id/95d7696a-7fda-11e0-a51b-40403c39f8d9?preapprovalkey=SIMULATED-4dd152718371a</redirectUrl>
+        <ccFirstName>Test</ccFirstName>
+        <ccLastName>User</ccLastName>
+        <ccCompany/>
+        <ccCountry/>
+        <ccAddress/>
+        <ccCity/>
+        <ccState/>
+        <ccZip/>
+        <ccType/>
+        <ccLastFour/>
+        <ccExpirationDate>2012-05-16T00:00:00+00:00</ccExpirationDate>
+        <ccEmail/>
+        <cancelType>paypal-wait</cancelType>
+        <cancelReason>PayPal preapproval is pending</cancelReason>
+        <canceledDatetime>2011-05-16T16:36:01+00:00</canceledDatetime>
+        <createdDatetime>2011-05-16T16:36:01+00:00</createdDatetime>
+        <items>
+          <item id="d19b4970-6e5a-102e-b098-40402145ee8b" code="MONTHLY_ITEM">
+            <name>Monthly Item</name>
+            <quantity>0</quantity>
+          </item>
+          <item id="d19ef2f0-6e5a-102e-b098-40402145ee8b" code="ONCE_ITEM">
+            <name>Once Item</name>
+            <quantity>0</quantity>
+          </item>
+        </items>
+        <invoices>
+          <invoice id="95de499c-7fda-11e0-a51b-40403c39f8d9">
+            <number>1</number>
+            <type>subscription</type>
+            <vatRate/>
+            <billingDatetime>2011-06-16T16:36:01+00:00</billingDatetime>
+            <paidTransactionId/>
+            <createdDatetime>2011-05-16T16:36:01+00:00</createdDatetime>
+            <charges>
+              <charge id="" code="PAID_MONTHLY_RECURRING">
+                <type>recurring</type>
+                <quantity>1</quantity>
+                <eachAmount>20.00</eachAmount>
+                <description/>
+                <createdDatetime>2011-06-16T16:36:01+00:00</createdDatetime>
+              </charge>
+            </charges>
+          </invoice>
+        </invoices>
+      </subscription>
+    </subscriptions>
+  </customer>
+</customers>
