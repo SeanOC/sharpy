@@ -1,4 +1,6 @@
 import httplib2
+from time import time
+
 from testconfig import config
 
 def clear_users():
@@ -10,7 +12,7 @@ def clear_users():
     h = httplib2.Http()
     h.add_credentials(username, password)
     
-    url = '%s/customers/delete-all/confirm/1/productCode/%s' % (endpoint, product)
+    url = '%s/customers/delete-all/confirm/%d/productCode/%s' % (endpoint, int(time()), product)
     
     response, content = h.request(url, 'POST')
     

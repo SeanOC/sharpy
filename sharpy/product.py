@@ -1,6 +1,7 @@
 from copy import copy
 from datetime import date
 from decimal import Decimal, getcontext as get_decimal_context
+from time import time
 
 from dateutil.relativedelta import relativedelta
 
@@ -249,7 +250,7 @@ class CheddarProduct(object):
         DO NOT RUN THIS UNLESS YOU REALLY, REALLY, REALLY MEAN TO!
         '''
         response = self.client.make_request(
-            path='customers/delete-all/confirm/1',
+            path='customers/delete-all/confirm/%d' % int(time()),
             method='POST'
         )
         
@@ -425,9 +426,10 @@ class Customer(object):
                 meta_data=None, method=None, \
                 cc_number=None, cc_expiration=None, \
                 cc_card_code=None, cc_first_name=None, \
-                cc_last_name=None, cc_company=None, \
+                cc_last_name=None, cc_company=None, cc_email=None,\
                 cc_country=None, cc_address=None, cc_city=None, \
-                cc_state=None, cc_zip=None, plan_code=None, bill_date=None ):
+                cc_state=None, cc_zip=None, plan_code=None, bill_date=None,
+                return_url=None, cancel_url=None,):
         
         data = self.product.build_customer_post_data( first_name=first_name,
                         last_name=last_name, email=email, plan_code=plan_code,
@@ -443,9 +445,10 @@ class Customer(object):
                         cc_card_code=cc_card_code,
                         cc_first_name=cc_first_name,
                         cc_last_name=cc_last_name, cc_company=cc_company,
-                        cc_country=cc_country, cc_address=cc_address,
-                        cc_city=cc_city, cc_state=cc_state, cc_zip=cc_zip,
-                        bill_date=bill_date,)
+                        cc_email=cc_email, cc_country=cc_country,
+                        cc_address=cc_address, cc_city=cc_city,
+                        cc_state=cc_state, cc_zip=cc_zip, bill_date=bill_date,
+                        return_url=return_url, cancel_url=cancel_url,)
         
         path = 'customers/edit'
         params = {'code': self.code}
