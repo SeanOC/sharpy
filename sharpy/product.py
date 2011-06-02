@@ -1,5 +1,5 @@
 from copy import copy
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal, getcontext as get_decimal_context
 from time import time
 
@@ -327,7 +327,7 @@ class PricingPlan(object):
         else:
             time_to_start = relativedelta(days=self.initial_bill_count)
         
-        initial_bill_date = date.today() + time_to_start
+        initial_bill_date = datetime.utcnow().date() + time_to_start
         
         return initial_bill_date
         
