@@ -67,7 +67,7 @@ repeat the process until all of the plans described below have been entered.
 **Free Monthly**
 
 :Name: Free Monthly
-:Code: FREE_MONTLY
+:Code: FREE_MONTHLY
 :Frequency: Monthly
 :Description: A free monthly plan
 :Monthly Amount: 0.00
