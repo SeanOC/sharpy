@@ -47,7 +47,7 @@ class CheddarProduct(object):
         return plans[0]
         
     def create_customer(self, code, first_name, last_name, email, plan_code, \
-                        company=None, is_vat_excempt=None, vat_number=None, \
+                        company=None, is_vat_exempt=None, vat_number=None, \
                         notes=None, first_contact_datetime=None, \
                         referer=None, campaign_term=None, \
                         campaign_name=None, campaign_source=None, \
@@ -61,7 +61,7 @@ class CheddarProduct(object):
                         cancel_url=None, charges=None, items=None):
 
         data = self.build_customer_post_data(code, first_name, last_name, \
-                    email, plan_code, company, is_vat_excempt, vat_number, \
+                    email, plan_code, company, is_vat_exempt, vat_number, \
                     notes, first_contact_datetime, referer, campaign_term, \
                     campaign_name, campaign_source, campaign_medium, \
                     campaign_content, meta_data, initial_bill_date, method, \
@@ -90,7 +90,7 @@ class CheddarProduct(object):
         
     def build_customer_post_data(self, code=None, first_name=None,\
                 last_name=None, email=None, plan_code=None, \
-                company=None, is_vat_excempt=None, vat_number=None, \
+                company=None, is_vat_exempt=None, vat_number=None, \
                 notes=None, first_contact_datetime=None, \
                 referer=None, campaign_term=None, \
                 campaign_name=None, campaign_source=None, \
@@ -123,11 +123,11 @@ class CheddarProduct(object):
         if company:
             data['company'] = company
 
-        if is_vat_excempt is not None:
-            if is_vat_excempt:
-                data['isVatExcempt'] = 1
+        if is_vat_exempt is not None:
+            if is_vat_exempt:
+                data['isVatExempt'] = 1
             else:
-                data['isVatExcempt'] = 0
+                data['isVatExempt'] = 0
 
         if vat_number:
             data['vatNumber'] = vat_number
@@ -337,7 +337,7 @@ class Customer(object):
     
     def __init__(self, code, first_name, last_name, email, product, id=None, \
                  company=None, notes=None, gateway_token=None, \
-                 is_vat_excempt=None, vat_number=None, \
+                 is_vat_exempt=None, vat_number=None, \
                  first_contact_datetime=None, referer=None, \
                  referer_host=None, campaign_source=None, \
                  campaign_medium=None, campaign_term=None, \
@@ -350,7 +350,7 @@ class Customer(object):
                        email=email, product=product, id=id,
                        company=company, notes=notes,
                        gateway_token=gateway_token,
-                       is_vat_excempt=is_vat_excempt,
+                       is_vat_exempt=is_vat_exempt,
                        vat_number=vat_number,
                        first_contact_datetime=first_contact_datetime,
                        referer=referer, referer_host=referer_host,
@@ -369,7 +369,7 @@ class Customer(object):
         
     def load_data(self, code, first_name, last_name, email, product, id=None,\
                   company=None, notes=None, gateway_token=None, \
-                  is_vat_excempt=None, vat_number=None, \
+                  is_vat_exempt=None, vat_number=None, \
                   first_contact_datetime=None, referer=None, \
                   referer_host=None, campaign_source=None, \
                   campaign_medium=None, campaign_term=None, \
@@ -385,7 +385,7 @@ class Customer(object):
         self.company = company
         self.notes = notes
         self.gateway_token = gateway_token
-        self.is_vat_excempt = is_vat_excempt
+        self.is_vat_exempt = is_vat_exempt
         self.vat_number = vat_number
         self.first_contact_datetime = first_contact_datetime
         self.referer = referer
@@ -415,7 +415,7 @@ class Customer(object):
         self.load_data(product=self.product, **customer_data)
         
     def update(self, first_name=None, last_name=None, email=None, \
-                company=None, is_vat_excempt=None, vat_number=None, \
+                company=None, is_vat_exempt=None, vat_number=None, \
                 notes=None, first_contact_datetime=None, \
                 referer=None, campaign_term=None, \
                 campaign_name=None, campaign_source=None, \
@@ -430,7 +430,7 @@ class Customer(object):
         
         data = self.product.build_customer_post_data( first_name=first_name,
                         last_name=last_name, email=email, plan_code=plan_code,
-                        company=company, is_vat_excempt=is_vat_excempt,
+                        company=company, is_vat_exempt=is_vat_exempt,
                         vat_number=vat_number, notes=notes, referer=referer,
                         campaign_term=campaign_term,
                         campaign_name=campaign_name,

@@ -151,12 +151,12 @@ class ProductTests(unittest.TestCase):
         self.get_customer(meta_data = {'key_1': 'value_1', 'key2': 'value_2'})
     
     @clear_users
-    def test_create_customer_with_true_vat_excempt(self):
-        self.get_customer(is_vat_excempt=True)
+    def test_create_customer_with_true_vat_exempt(self):
+        self.get_customer(is_vat_exempt=True)
     
     @clear_users
-    def test_create_customer_with_false_vat_excempt(self):
-        self.get_customer(is_vat_excempt=False)
+    def test_create_customer_with_false_vat_exempt(self):
+        self.get_customer(is_vat_exempt=False)
         
     @clear_users
     def test_create_customer_with_vat_number(self):
