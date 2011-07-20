@@ -165,7 +165,7 @@ class CustomersParser(CheddarOutputParser):
         customer['email'] = customer_element.findtext('email')
         customer['notes'] = customer_element.findtext('notes')
         customer['gateway_token'] = customer_element.findtext('gateway_token')
-        customer['is_vat_excempt'] = customer_element.findtext('isVatExcempt')
+        customer['is_vat_exempt'] = customer_element.findtext('isVatExempt')
         customer['vat_number'] = customer_element.findtext('vatNumber')
         customer['first_contact_datetime'] = self.parse_datetime(customer_element.findtext('firstContactDatetime'))
         customer['referer'] = customer_element.findtext('referer')
