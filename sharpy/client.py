@@ -1,3 +1,4 @@
+import base64
 import logging
 from urllib import urlencode
 from decimal import getcontext
@@ -26,9 +27,9 @@ class Client(object):
         self.endpoint = endpoint or self.default_endpoint
         self.cache = cache
         self.timeout = timeout
-        
+
         super(Client, self).__init__()
-    
+
     def build_url(self, path, params=None):
         '''
         Constructs the url for a cheddar API resource
@@ -41,9 +42,9 @@ class Client(object):
         if params:
             for key, value in params.items():
                 url = u'%s/%s/%s' % (url, key, value)
-            
+
         return url
-        
+
     def format_datetime(self, to_format):
         if to_format == 'now':
             str_dt = to_format
@@ -54,7 +55,7 @@ class Client(object):
                 utc_value = to_format
             str_dt = utc_value.strftime('%Y-%m-%dT%H:%M:%S+00:00')
         return str_dt
-        
+
     def format_date(self, to_format):
         if to_format == 'now':
             str_dt = to_format
@@ -65,37 +66,37 @@ class Client(object):
                 utc_value = to_format
             str_dt = utc_value.strftime('%Y-%m-%d')
         return str_dt
-    
+
     def make_request(self, path, params=None, data=None, method=None):
         '''
-        Makes a request to the cheddar api using the authentication and 
+        Makes a request to the cheddar api using the authentication and
         configuration settings available.
         '''
         # Setup values
         url = self.build_url(path, params)
         client_log.debug('Requesting:  %s' % url)
-        
+        method = method or 'GET'
+        body = None
+        headers = {}
+
         if data:
             method = 'POST'
             body = urlencode(data)
             headers = {
                 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
-        else:
-            method = method or 'GET'
-            body = None
-            headers = None
-            
-            
 
         client_log.debug('Request Method:  %s' % method)
         client_log.debug('Request Body(Data):  %s' % data)
         client_log.debug('Request Body(Raw):  %s' % body)
-            
+
         # Setup http client
         h = httplib2.Http(cache=self.cache, timeout=self.timeout)
-        h.add_credentials(self.username, self.password)
-        
+        #h.add_credentials(self.username, self.password)
+        # Skip the normal http client behavior and send auth headers immediately
+        # to save an http request.
+        headers['Authorization'] = "Basic %s" % base64.standard_b64encode(self.username + ':' + self.password).strip()
+
         # Make request
         response, content = h.request(url, method, body=body, headers=headers)
         status = response.status
@@ -117,10 +118,10 @@ class Client(object):
                 exception_class = NaughtyGateway
             elif status == 422:
                 exception_class = UnprocessableEntity
-            
+
             raise exception_class(response, content)
-        
+
         response.content = content
         return response
-        
-        
+
+
