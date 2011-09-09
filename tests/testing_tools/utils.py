@@ -11,10 +11,10 @@ def clear_users():
 
     h = httplib2.Http()
     h.add_credentials(username, password)
-    
+
     url = '%s/customers/delete-all/confirm/%d/productCode/%s' % (endpoint, int(time()), product)
-    
+
     response, content = h.request(url, 'POST')
-    
-    if response.status != 302:
-        raise Exception('Could not clear users.  Recieved a response of %s %s ' % response.status, response.reason)
+
+    if response.status != 200:
+        raise Exception('Could not clear users.  Recieved a response of %s %s ' % (response.status, response.reason))
