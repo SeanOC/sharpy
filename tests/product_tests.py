@@ -252,7 +252,6 @@ class ProductTests(unittest.TestCase):
 
     @clear_users
     def test_update_paypal_customer(self):
-        raise SkipTest('Skipping this test until a bug in CG is fixed.')
         data = copy(self.paypal_defaults)
         customer = self.get_customer(**data)
         customer.update(
@@ -260,8 +259,6 @@ class ProductTests(unittest.TestCase):
             return_url='http://example.com/update-success/',
             cancel_url='http://example.com/update-cancel/',
         )
-        print customer.subscription.redirect_url
-        assert False
 
         
     @clear_users
