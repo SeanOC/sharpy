@@ -2,9 +2,11 @@
 
 from distutils.core import setup
 
+from sharpy import VERSION
+
 setup(
     name='Sharpy',
-    version='0.7.3',
+    version=".".join(map(str, VERSION)),
     description='Python client for the Cheddar Getter API (http://cheddargetter.com).',
     author="Sean O'Connor",
     author_email="sean@saaspire.com",
