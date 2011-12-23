@@ -28,6 +28,19 @@ Free customers require a minimal amount of information.  Accordingly, the call t
 .. literalinclude:: examples/customer_creation/free.py
     :linenos:
 
+Paypal Customers
+================
+
+Paypal customers require only a little bit more information.  You ask CheddarGetter to create 
+the account, then redirect the user to the Paypal site to log in and authorize the subscription.
+
+.. literalinclude:: examples/customer_creation/paypal.py
+    :linenos:
+    
+When the user has accepted or cancelled the subscription they will be redirected to the URLs 
+passed into the creation call.  You should always verify the status of the account with 
+CheddarGetter directly, rather than relying on the user visiting those URLs.
+    
 Paid Customers
 ==============
 
