@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-
-from distutils.core import setup
+try:
+    from setuptools import setup 
+except ImportError, err:
+    from distutils.core import setup
 
 from sharpy import VERSION
 
