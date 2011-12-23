@@ -137,3 +137,18 @@ Get all customers
 =================
 
 .. literalinclude:: examples/customer_fetch/all_customers.py
+
+==============
+Hosted Updates
+==============
+
+CheddarGetter has a "hosted"_ solution that allows you to quickly get up and 
+running quickly.  This solution allows you to direct the customer to a 
+CheddarGetter-hosted site to sign up.  Once signed up, you need to be able to 
+send the customer back to the correct account to modify their subscriptions.
+To do this, you need to calculate a CheddarGetter key for the account.
+
+.. code:: python
+    
+    import hashlib
+    return hashlib.md5( '%s|%s'%( customer_code, CHEDDAR_PRODUCT_KEY, )).hexdigest()[:10]
