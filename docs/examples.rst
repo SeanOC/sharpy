@@ -28,6 +28,19 @@ Free customers require a minimal amount of information.  Accordingly, the call t
 .. literalinclude:: examples/customer_creation/free.py
     :linenos:
 
+Paypal Customers
+================
+
+Paypal customers require only a little bit more information.  You ask CheddarGetter to create 
+the account, then redirect the user to the Paypal site to log in and authorize the subscription.
+
+.. literalinclude:: examples/customer_creation/paypal.py
+    :linenos:
+    
+When the user has accepted or cancelled the subscription they will be redirected to the URLs 
+passed into the creation call.  You should always verify the status of the account with 
+CheddarGetter directly, rather than relying on the user visiting those URLs.
+    
 Paid Customers
 ==============
 
@@ -124,3 +137,25 @@ Get all customers
 =================
 
 .. literalinclude:: examples/customer_fetch/all_customers.py
+
+==============
+Hosted Updates
+==============
+
+CheddarGetter has a "hosted" solution that allows you to get up and 
+running quickly.  This solution allows you to direct the customer to a 
+CheddarGetter-hosted site to sign up.  Once signed up, you need to be able to 
+send the customer back to the correct account to modify their subscriptions.
+To do this, you need to calculate a CheddarGetter key for the account.
+
+.. code:: python
+    
+    import hashlib, urllib
+    key = hashlib.md5( '%s|%s'%( customer_code, CHEDDAR_PRODUCT_KEY, )).hexdigest()[:10]
+    query = urllib.urlencode({
+        'code': customer_code,
+        'key': key,
+    })
+    redirect(
+        CHEDDAR_HOSTED_DOMAIN + '/update' + '?' + query 
+    )
