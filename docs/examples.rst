@@ -142,7 +142,7 @@ Get all customers
 Hosted Updates
 ==============
 
-CheddarGetter has a "hosted"_ solution that allows you to quickly get up and 
+CheddarGetter has a "hosted" solution that allows you to get up and 
 running quickly.  This solution allows you to direct the customer to a 
 CheddarGetter-hosted site to sign up.  Once signed up, you need to be able to 
 send the customer back to the correct account to modify their subscriptions.
@@ -150,5 +150,12 @@ To do this, you need to calculate a CheddarGetter key for the account.
 
 .. code:: python
     
-    import hashlib
-    return hashlib.md5( '%s|%s'%( customer_code, CHEDDAR_PRODUCT_KEY, )).hexdigest()[:10]
+    import hashlib, urllib
+    key = hashlib.md5( '%s|%s'%( customer_code, CHEDDAR_PRODUCT_KEY, )).hexdigest()[:10]
+    query = urllib.urlencode({
+        'code': customer_code,
+        'key': key,
+    })
+    redirect(
+        CHEDDAR_HOSTED_DOMAIN + '/update' + '?' + query 
+    )
