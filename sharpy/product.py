@@ -82,8 +82,8 @@ class CheddarProduct(object):
                 data['items[%d][quantity]' % i] = item.get('quantity', 1)
         
         response = self.client.make_request(path='customers/new', data=data)
-        cusotmer_parser = CustomersParser()
-        customers_data = cusotmer_parser.parse_xml(response.content)
+        customer_parser = CustomersParser()
+        customers_data = customer_parser.parse_xml(response.content)
         customer = Customer(product=self, **customers_data[0])
         
         return customer
@@ -233,8 +233,8 @@ class CheddarProduct(object):
             response = None
         
         if response:
-            cusotmer_parser = CustomersParser()
-            customers_data = cusotmer_parser.parse_xml(response.content)
+            customer_parser = CustomersParser()
+            customers_data = customer_parser.parse_xml(response.content)
             for customer_data in customers_data:
                 customers.append(Customer(product=self, **customer_data))
             
@@ -246,8 +246,8 @@ class CheddarProduct(object):
             path='customers/get',
             params={'code': code},
         )
-        cusotmer_parser = CustomersParser()
-        customers_data = cusotmer_parser.parse_xml(response.content)
+        customer_parser = CustomersParser()
+        customers_data = customer_parser.parse_xml(response.content)
         
         return Customer(product=self, **customers_data[0])
     
@@ -422,8 +422,8 @@ class Customer(object):
             self.subscription = Subscription(**subscription_data)
         
     def load_data_from_xml(self, xml):
-        cusotmer_parser = CustomersParser()
-        customers_data = cusotmer_parser.parse_xml(xml)
+        customer_parser = CustomersParser()
+        customers_data = customer_parser.parse_xml(xml)
         customer_data = customers_data[0]
         self.load_data(product=self.product, **customer_data)
         
@@ -645,8 +645,8 @@ class Subscription(object):
             params={'code': self.customer.code},
         )
         
-        cusotmer_parser = CustomersParser()
-        customers_data = cusotmer_parser.parse_xml(response.content)
+        customer_parser = CustomersParser()
+        customers_data = customer_parser.parse_xml(response.content)
         customer_data = customers_data[0]
         self.customer.load_data(
             product=self.customer.product,
